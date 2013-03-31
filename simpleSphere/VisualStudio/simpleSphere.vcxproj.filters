@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="simpleSphere.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CUDA">
+      <UniqueIdentifier>{489dcc18-478a-49e4-9f57-af9919ed6343}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CUDA\header">
+      <UniqueIdentifier>{4c83a3cb-420a-4407-97c0-6b83ae8fc488}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Tools.cuh">
+      <Filter>CUDA\header</Filter>
+    </None>
+    <None Include="simpleSphere.cuh">
+      <Filter>CUDA\header</Filter>
+    </None>
+    <None Include="simpleSphere.sdf" />
+    <None Include="defines.cuh">
+      <Filter>CUDA\header</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="Tools.cu">
+      <Filter>CUDA</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Ray.cu">
+      <Filter>CUDA</Filter>
+    </CudaCompile>
+    <CudaCompile Include="GeometricObject.cu">
+      <Filter>CUDA</Filter>
+    </CudaCompile>
+    <CudaCompile Include="simpleSphere.cu">
+      <Filter>CUDA</Filter>
+    </CudaCompile>
+    <CudaCompile Include="ShadeRec.cu">
+      <Filter>CUDA</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Tracer.cu">
+      <Filter>CUDA</Filter>
+    </CudaCompile>
+    <CudaCompile Include="World.cu">
+      <Filter>CUDA</Filter>
+    </CudaCompile>
+    <CudaCompile Include="ViewPlane.cu">
+      <Filter>CUDA</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Sampler.cu">
+      <Filter>CUDA</Filter>
+    </CudaCompile>
+  </ItemGroup>
+</Project>

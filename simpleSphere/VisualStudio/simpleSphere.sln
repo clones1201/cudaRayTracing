@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simpleSphere", "simpleSphere.vcxproj", "{34DFC12F-FBFD-43F8-A6B5-1819F332A6F5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "..\Test\Test.vcxproj", "{7A54F696-9942-4F47-BDD1-AC84D8ED0F3E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cudaTest", "..\cudaTest\cudaTest.vcxproj", "{EAE3D39B-28C6-4721-9853-AA83004C16D5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{34DFC12F-FBFD-43F8-A6B5-1819F332A6F5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{34DFC12F-FBFD-43F8-A6B5-1819F332A6F5}.Debug|Win32.Build.0 = Debug|Win32
+		{34DFC12F-FBFD-43F8-A6B5-1819F332A6F5}.Release|Win32.ActiveCfg = Release|Win32
+		{34DFC12F-FBFD-43F8-A6B5-1819F332A6F5}.Release|Win32.Build.0 = Release|Win32
+		{7A54F696-9942-4F47-BDD1-AC84D8ED0F3E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7A54F696-9942-4F47-BDD1-AC84D8ED0F3E}.Debug|Win32.Build.0 = Debug|Win32
+		{7A54F696-9942-4F47-BDD1-AC84D8ED0F3E}.Release|Win32.ActiveCfg = Release|Win32
+		{7A54F696-9942-4F47-BDD1-AC84D8ED0F3E}.Release|Win32.Build.0 = Release|Win32
+		{EAE3D39B-28C6-4721-9853-AA83004C16D5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EAE3D39B-28C6-4721-9853-AA83004C16D5}.Debug|Win32.Build.0 = Debug|Win32
+		{EAE3D39B-28C6-4721-9853-AA83004C16D5}.Release|Win32.ActiveCfg = Release|Win32
+		{EAE3D39B-28C6-4721-9853-AA83004C16D5}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
