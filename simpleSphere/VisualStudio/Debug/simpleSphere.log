@@ -1,0 +1,197 @@
+﻿生成启动时间为 2013/3/31 星期日 23:04:39。
+     1>项目“E:\Documents\GitHub\cudaRayTracing\simpleSphere\VisualStudio\simpleSphere.vcxproj”在节点 2 上(rebuild 个目标)。
+     1>_PrepareForClean:
+         正在删除文件“Debug\simpleSphere.lastbuildstate”。
+       CudaClean:
+         cmd.exe /C "C:\Users\ChengJiesang\AppData\Local\Temp\tmp1525ab9e2de7443fb48632f4b01a1d7e.cmd"
+         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\bin\nvcc.exe" -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin"  -I"./" -I"../common/inc" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include"  -G   --keep-dir "Debug" -maxrregcount=0  --machine 32 --compile  -g   -DWin32 -DWIN32 -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MTd  " -o "Debug\simpleSphere.cu.obj" "E:\Documents\GitHub\cudaRayTracing\simpleSphere\VisualStudio\simpleSphere.cu" -clean
+         
+         E:\Documents\GitHub\cudaRayTracing\simpleSphere\VisualStudio>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\bin\nvcc.exe" -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin"  -I"./" -I"../common/inc" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include"  -G   --keep-dir "Debug" -maxrregcount=0  --machine 32 --compile  -g   -DWin32 -DWIN32 -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MTd  " -o "Debug\simpleSphere.cu.obj" "E:\Documents\GitHub\cudaRayTracing\simpleSphere\VisualStudio\simpleSphere.cu" -clean 
+         正在删除文件“Debug\simpleSphere.cu.deps”。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(299,5): warning MSB8004: Output 目录未以斜杠结尾。此生成实例将添加斜杠，因为必须有这个斜杠才能正确计算 Output 目录。
+       InitializeBuildStatus:
+         正在对“Debug\simpleSphere.unsuccessfulbuild”执行 Touch 任务。
+       AddCudaCompileDeps:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\cl.exe /E /nologo /showIncludes /TP /D__CUDACC__ /DWin32 /DWIN32 /D_MBCS /I./ /I../common/inc /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\bin" /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include" /I. /FIcuda_runtime.h /c E:\Documents\GitHub\cudaRayTracing\simpleSphere\VisualStudio\simpleSphere.cu 
+       CudaBuild:
+         Skipping CUDA source file GeometricObject.cu (excluded from build).
+       CudaBuild:
+         Skipping CUDA source file Ray.cu (excluded from build).
+       CudaBuild:
+         Skipping CUDA source file Sampler.cu (excluded from build).
+       CudaBuild:
+         Skipping CUDA source file ShadeRec.cu (excluded from build).
+       CudaBuild:
+         Compiling CUDA source file simpleSphere.cu...
+         cmd.exe /C "C:\Users\ChengJiesang\AppData\Local\Temp\tmpb9066835b9f0426e90c097e84af4ff73.cmd"
+         "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\bin\nvcc.exe" -gencode=arch=compute_10,code=\"sm_10,compute_10\" --use-local-env --cl-version 2010 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin"  -I"./" -I"../common/inc" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include"  -G   --keep-dir "Debug" -maxrregcount=0  --machine 32 --compile  -g   -DWin32 -DWIN32 -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MTd  " -o "Debug\simpleSphere.cu.obj" "E:\Documents\GitHub\cudaRayTracing\simpleSphere\VisualStudio\simpleSphere.cu"
+         
+         E:\Documents\GitHub\cudaRayTracing\simpleSphere\VisualStudio>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\bin\nvcc.exe" -gencode=arch=compute_10,code=\"sm_10,compute_10\" --use-local-env --cl-version 2010 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin"  -I"./" -I"../common/inc" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include"  -G   --keep-dir "Debug" -maxrregcount=0  --machine 32 --compile  -g   -DWin32 -DWIN32 -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Zi /RTC1 /MTd  " -o "Debug\simpleSphere.cu.obj" "E:\Documents\GitHub\cudaRayTracing\simpleSphere\VisualStudio\simpleSphere.cu" 
+         simpleSphere.cu
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(876): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(1846): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(2750): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(3698): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(4608): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(5503): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(6405): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(7317): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\device_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\device_functions.h(783): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\device_functions.h(1662): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\sm_13_double_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\device_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\device_functions.h(783): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\device_functions.h(1662): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(876): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(1846): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(2750): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(3698): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(4608): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(5503): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(6405): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(7317): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>e:\documents\github\cudaraytracing\simplesphere\visualstudio\World.cu(100): warning : a __host__ function("hitBareBonesObject") redeclared with __device__, hence treated as a __host__ __device__ function
+         
+         tmpxft_00001854_00000000-2_simpleSphere.cudafe1.gpu
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(876): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(1846): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(2750): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(3698): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(4608): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(5503): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(6405): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(7317): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         tmpxft_00001854_00000000-7_simpleSphere.cudafe2.gpu
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(876): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(1846): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(2750): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(3698): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(4608): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(5503): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(6405): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(7317): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\device_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\device_functions.h(783): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\device_functions.h(1662): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\sm_13_double_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         simpleSphere.cu
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(876): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(1846): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(2750): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(3698): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(4608): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(5503): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(6405): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(7317): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\device_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\device_functions.h(783): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\device_functions.h(1662): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\sm_13_double_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\device_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\device_functions.h(783): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\device_functions.h(1662): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(876): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(1846): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(2750): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(3698): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(4608): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(5503): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(6405): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include\math_functions.h(7317): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(167): warning : a __device__ variable "prng_seed" cannot be directly read in a host function
+         
+     1>e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(167): warning : a __device__ variable "prng_seed" cannot be directly written in a host function
+         
+     1>e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(168): warning : a __device__ variable "prng_seed" cannot be directly read in a host function
+         
+     1>e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(172): warning : a __device__ variable "prng_seed" cannot be directly read in a host function
+         
+     1>e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(172): warning : a __device__ variable "prng_seed" cannot be directly written in a host function
+         
+     1>e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(174): warning : a __device__ variable "prng_seed" cannot be directly read in a host function
+         
+         ./e:\documents\github\cudaraytracing\simplesphere\visualstudio\World.cu(67): Warning: Cannot tell what pointer points to, assuming global memory space
+         ./e:\documents\github\cudaraytracing\simplesphere\visualstudio\World.cu(70): Warning: Cannot tell what pointer points to, assuming global memory space
+         ./e:\documents\github\cudaraytracing\simplesphere\visualstudio\World.cu(70): Warning: Cannot tell what pointer points to, assuming global memory space
+         ./e:\documents\github\cudaraytracing\simplesphere\visualstudio\World.cu(82): Warning: Cannot tell what pointer points to, assuming global memory space
+         ./e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(17): Warning: Cannot tell what pointer points to, assuming global memory space
+         ./e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(18): Warning: Cannot tell what pointer points to, assuming global memory space
+         ./e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(19): Warning: Cannot tell what pointer points to, assuming global memory space
+         ./e:\documents\github\cudaraytracing\simplesphere\visualstudio\GeometricObject.cu(12): Warning: Cannot tell what pointer points to, assuming global memory space
+         ./e:\documents\github\cudaraytracing\simplesphere\visualstudio\GeometricObject.cu(12): Warning: Cannot tell what pointer points to, assuming global memory space
+         ./e:\documents\github\cudaraytracing\simplesphere\visualstudio\GeometricObject.cu(24): Warning: Cannot tell what pointer points to, assuming global memory space
+         ./e:\documents\github\cudaraytracing\simplesphere\visualstudio\GeometricObject.cu(33): Warning: Cannot tell what pointer points to, assuming global memory space
+         ptxas C:/Users/CHENGJ~1/AppData/Local/Temp/tmpxft_00001854_00000000-4_simpleSphere.ptx, line 782; : warning : Double is not supported. Demoting to float
+         tmpxft_00001854_00000000-2_simpleSphere.cudafe1.cpp
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(876): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(1846): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(2750): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(3698): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(4608): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(5503): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(6405): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\math_functions.h(7317): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+         tmpxft_00001854_00000000-12_simpleSphere.ii
+     1>e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(139): warning C4244: “=”: 从“const float”转换到“unsigned char”，可能丢失数据
+     1>e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(140): warning C4244: “=”: 从“const float”转换到“unsigned char”，可能丢失数据
+     1>e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(141): warning C4244: “=”: 从“const float”转换到“unsigned char”，可能丢失数据
+     1>e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(142): warning C4244: “=”: 从“const float”转换到“unsigned char”，可能丢失数据
+     1>e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(148): warning C4244: “=”: 从“const float”转换到“unsigned char”，可能丢失数据
+     1>e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(149): warning C4244: “=”: 从“const float”转换到“unsigned char”，可能丢失数据
+     1>e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(150): warning C4244: “=”: 从“const float”转换到“unsigned char”，可能丢失数据
+     1>e:\documents\github\cudaraytracing\simplesphere\visualstudio\Tools.cu(151): warning C4244: “=”: 从“const float”转换到“unsigned char”，可能丢失数据
+         正在删除文件“tmpxft_00001854_00000000-8_simpleSphere.cpp3.o”。
+       CudaBuild:
+         Skipping CUDA source file Tools.cu (excluded from build).
+       CudaBuild:
+         Skipping CUDA source file Tracer.cu (excluded from build).
+       CudaBuild:
+         Skipping CUDA source file ViewPlane.cu (excluded from build).
+       CudaBuild:
+         Skipping CUDA source file World.cu (excluded from build).
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt simpleSphere.cpp
+         simpleSphere.cpp
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\device_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\device_functions.h(783): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\device_functions.h(1662): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+     1>c:\program files\nvidia gpu computing toolkit\cuda\v5.0\include\sm_13_double_functions.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+       ManifestResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\simpleSphere.exe.embed.manifest.res" Debug\simpleSphere_manifest.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\Debug\Win32\simpleSphere.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\lib\Win32" cudart.lib freeglut.lib glew32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\simpleSphere.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"E:\Documents\GitHub\cudaRayTracing\simpleSphere\Debug\Win32\simpleSphere.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\Debug\Win32\simpleSphere.lib" /MACHINE:X86 Debug\simpleSphere.cu.obj
+         Debug\simpleSphere.exe.embed.manifest.res
+         Debug\simpleSphere.obj
+       Manifest:
+         正在删除文件“Debug\simpleSphere.exe.embed.manifest”。
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\simpleSphere.exe.embed.manifest" /manifest Debug\simpleSphere.exe.intermediate.manifest
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\simpleSphere.exe.embed.manifest.res" Debug\simpleSphere_manifest.rc 
+       LinkEmbedManifest:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"..\Debug\Win32\simpleSphere.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\lib\Win32" cudart.lib freeglut.lib glew32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\simpleSphere.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"E:\Documents\GitHub\cudaRayTracing\simpleSphere\Debug\Win32\simpleSphere.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\Debug\Win32\simpleSphere.lib" /MACHINE:X86 Debug\simpleSphere.cu.obj
+         Debug\simpleSphere.exe.embed.manifest.res
+         Debug\simpleSphere.obj
+         simpleSphere.vcxproj -> E:\Documents\GitHub\cudaRayTracing\simpleSphere\VisualStudio\..\Debug\Win32\simpleSphere.exe
+       PostBuildEvent:
+         echo copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\bin\cudart*.dll" "..\Debug\Win32\"
+         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\bin\cudart*.dll" "..\Debug\Win32\"
+         :VCEnd
+         copy "C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\bin\cudart*.dll" "..\Debug\Win32\"
+         C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\bin\cudart32_50_35.dll
+         C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v5.0\bin\cudart64_50_35.dll
+         已复制         2 个文件。
+       FinalizeBuildStatus:
+         正在删除文件“Debug\simpleSphere.unsuccessfulbuild”。
+         正在对“Debug\simpleSphere.lastbuildstate”执行 Touch 任务。
+     1>已完成生成项目“E:\Documents\GitHub\cudaRayTracing\simpleSphere\VisualStudio\simpleSphere.vcxproj”(rebuild 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:16.56

@@ -79,7 +79,7 @@ __global__
 
 			//Sphere*s;
 			//multiObjTraceRay(w,ray,&pixelColor);
-			singleSphereTraceRay(w,s,ray,&pixelColor);
+			singleSphereTraceRay(w,(Sphere*)*(w->object),ray,&pixelColor);
 
 			buffer[offset] = buffer[offset] + pixelColor / numSample;
 			//buffer[offset] = w->backgroundColor;

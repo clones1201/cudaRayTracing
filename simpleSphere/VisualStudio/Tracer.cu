@@ -4,13 +4,13 @@ __device__ inline
 void singleSphereTraceRay(World *w,Sphere *sphere,Ray ray, RGBAColor *color){
 		ShadeRec sr;
 		//cudaMalloc(&sr,sizeof(ShadeRec));
-		Sphere s;
-		s.center = Point3D(0.0,0.0,300);
-		s.radius = 200;
+		//Sphere s;
+		//s.center = Point3D(0.0,0.0,300);
+		//s.radius = 200;
 
 		float t;
 
-		if( sphereHit(&s,ray,&t,&sr))
+		if( sphereHit(sphere,ray,&t,&sr))
 			*color = (red);
 		else
 			*color = (black);
