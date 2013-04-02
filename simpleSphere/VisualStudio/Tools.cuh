@@ -21,7 +21,7 @@ typedef uchar4		RGBAColor;
 #define red		make_uchar4(255,0,0,255)
 #define green   make_uchar4(0,255,0,255)
 #define blue	make_uchar4(0,0,255,255)
-
+#define yellow	make_uchar4(255,255,0,255)
 // operator of Vector3D
 
 extern __device__ __host__ inline Vector3D operator+(const Vector3D& param1, const Vector3D& param2);

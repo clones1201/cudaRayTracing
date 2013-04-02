@@ -22,78 +22,41 @@ void build_world(World **w,int width,int height){
 	h_world->backgroundColor = black;
 	
 	/********  Geometric Object  ***********/
-	h_world->numObject = 3;
-	GeometricObject **obj = (GeometricObject **)malloc(3 * sizeof(GeometricObject*));
+	h_world->numObject = 4;
+	GeometricObject **obj = (GeometricObject **)malloc(h_world->numObject * sizeof(GeometricObject*));
 
-	initSphere( ((Sphere**)(obj)),		Point3D(0,0,200),	180,		red);
-	initSphere( ((Sphere**)(obj+1)),	Point3D(0,50,200),	150,		green);
-	initPlane( ((Plane**)(obj+2)),	Point3D(0,0,200),	Normal(0,1,-1),blue);
+	initSphere( ((Sphere**)(obj)),		Point3D(0,120,280),	120,		red);
+	initSphere( ((Sphere**)(obj+1)),	Point3D(0,150,0),	150,		green);
+	initSphere( ((Sphere**)(obj+2)),	Point3D(210,100,100),	100,		yellow);
+	initPlane( ((Plane**)(obj+3)),	Point3D(0,0,0),	Normal(0,1,0),		blue);
 
-	cudaMalloc((void**)&(h_world->object),3 * sizeof(GeometricObject*) );
+	cudaMalloc((void**)&(h_world->object),h_world->numObject  * sizeof(GeometricObject*) );
 	cudaCheckErrors("object pointer memory allocate failed");
 	
-	cudaMemcpy(h_world->object,obj,3 * sizeof(GeometricObject*),cudaMemcpyHostToDevice);
+	cudaMemcpy(h_world->object,obj,h_world->numObject * sizeof(GeometricObject*),cudaMemcpyHostToDevice);
 	cudaCheckErrors("object pointer memory copy failed");
 
+	/* camara */
+	Pinhole pinhole;
+	pinhole.type = CAMARA_TYPE_PINHOLE;
+	pinhole.eye = Point3D(300,400,500);
+	pinhole.lookat = Point3D(0,100,0);
+	pinhole.up = Vector3D(0,1,0);
+	pinhole.viewDistance = 50;
+	pinhole.zoom = 5;
+	ComputeUVW((Camara*)&pinhole);
+	cudaMalloc((void**)&(h_world->camara),sizeof(Pinhole));
+	cudaCheckErrors("pinhole memory allocate failed");
+	cudaMemcpy((h_world->camara),&pinhole,sizeof(Pinhole),cudaMemcpyHostToDevice);
+	cudaCheckErrors("pinhole copy failed");
+
+	/*  world */
 	cudaMalloc((void**) w , sizeof(World));
 	cudaCheckErrors( "world allocate failed" );
 	cudaMemcpy( *w , h_world,sizeof(World),cudaMemcpyHostToDevice);
 	cudaCheckErrors("world memory copy failed");
 
 	free(h_world);free(h_vp);
-}
-
-__global__
-	void render_scene_k(World *w,RGBAColor *buffer){
-
-		RGBAColor pixelColor = red;
-		
-		Ray ray;
-				
-		int r = blockIdx.x * blockDim.x + threadIdx.x;
-		int c = blockIdx.y * blockDim.y + threadIdx.y;
-		
-		int offset = r * gridDim.x * blockDim.x + c;
-
-		buffer[offset] = w->backgroundColor;
-
-		Point2D sp;		//sample point in [0,1] x [0,1]
-		Point2D pp;		//sample point in a pixel
-
-		//SamplerType type = SAMPLER_JITTERED;		
-		//SampleScale scale = SAMPLE_SCALE_16;
-		
-
-		int numSample = getSampleNum(  w->vp->sampleScale  );
-
-		for(int i = 0 ; i < numSample ; ++ i ){
-			sp = getSampleUnitSquare( w->vp->samplerType , i , w->vp->sampleScale );
-
-			//pp.x = w->vp->s * ( c - 0.5 * w->vp->hres + sp.x );
-			//pp.y = w->vp->s * ( r - 0.5 * w->vp->vres + sp.y );
-			pp.x = 1 * ( c - 0.5 * 512 + sp.x );
-			pp.y = 1 * ( r - 0.5 * 512 + sp.y );
-
-			ray.o = Point3D(pp.x,pp.y,0);
-			ray.d = Vector3D(0,0,1);
-
-			//Sphere*s;
-			//multiObjTraceRay(w,ray,&pixelColor);
-			singleSphereTraceRay(w,(Sphere*)*(w->object),ray,&pixelColor);
-
-			buffer[offset] = buffer[offset] + pixelColor / numSample;
-			//buffer[offset] = w->backgroundColor;
-		}
-}
-
-void render_scene(World *w,int width,int height,RGBAColor *buffer){
-	
-	dim3 blockPerGrid(width/16,height/16);
-	dim3 threadPerBlock(16,16);
-	render_scene_k<<<blockPerGrid,threadPerBlock>>>(w,buffer);
-	cudaCheckErrors("render_scene_k failed...");
-
-	cudaDeviceSynchronize();
 }
 
 __device__ 

@@ -61,6 +61,34 @@ struct Plane{
 	Normal normal;
 };
 
+/* camara */
+
+typedef int CamaraType;
+#define CAMARA_TYPE_DEFAULT			0
+#define CAMARA_TYPE_PINHOLE			1
+
+struct Camara{
+	CamaraType type;
+	Point3D eye;
+	Point3D lookat;
+	Vector3D up;
+	Vector3D u,v,w;
+	float exposure_time;
+};
+
+struct Pinhole{
+	CamaraType type;
+	Point3D eye;
+	Point3D lookat;
+	Vector3D up;
+	Vector3D u,v,w;
+	float exposure_time;
+	
+	float viewDistance;
+	float zoom;
+};
+
+/************************/
 
 struct ShadeRec{
 	bool hitAnObject;
@@ -88,7 +116,7 @@ public:
 	ViewPlane *vp;
 	RGBAColor backgroundColor;
 //	Sphere *sphere;
-
+	Camara *camara;
 };
 
 
@@ -134,8 +162,18 @@ SampleScale getSampleScale(int num);
 /* World function */
 extern void build_world(World **w);
 
-extern void render_scene(World *w,int width,int height,RGBAColor *buffer);
-
 extern void hitBareBonesObject(World *w, Ray ray,ShadeRec *sr);
+
+/* camara function */
+__device__ __host__ inline
+void ComputeUVW(Camara *c){
+	c->w = c->eye - c->lookat;
+	c->w = Normalize( c->w );
+	c->u = CrossProduct( c->up , c->w );
+	c->u = Normalize( c->u );
+	c->v = CrossProduct( c->w , c->u );
+}
+
+extern void RenderScene(World *w, Camara *c, int width,int height, RGBAColor *buffer);
 
 #endif
