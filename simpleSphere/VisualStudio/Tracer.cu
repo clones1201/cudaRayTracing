@@ -1,7 +1,8 @@
 #include "defines.cuh"
+#include "function_defines.cuh"
 
-__device__ inline
-void singleSphereTraceRay(World *w,Sphere *sphere,Ray ray, RGBAColor *color){
+__device__
+void singleSphereTraceRay(World *w,Sphere *sphere,Ray ray, RGBColor *color){
 		ShadeRec sr;
 		//cudaMalloc(&sr,sizeof(ShadeRec));
 		//Sphere s;
@@ -10,7 +11,7 @@ void singleSphereTraceRay(World *w,Sphere *sphere,Ray ray, RGBAColor *color){
 
 		float t;
 
-		if( sphereHit(sphere,ray,&t,&sr))
+		if( Hit((GeometricObject*)sphere,ray,&t,&sr))
 			*color = (red);
 		else
 			*color = (black);
@@ -18,15 +19,31 @@ void singleSphereTraceRay(World *w,Sphere *sphere,Ray ray, RGBAColor *color){
 		//*color = make_uchar4( (unsigned char)( ray->o.x * ray->o.x + ray->o.y * ray->o.y ) % 255 , 0,0,255);
 }
 
-__device__ inline
-void multiObjTraceRay(World *w, Ray ray,RGBAColor *color){
+__device__ 
+RGBColor multiObjTraceRay(World *w, Ray ray){
 	ShadeRec sr;
-	hitBareBonesObject(w,ray,&sr);
+	HitBareBonesObject(w,ray,&sr);
 
 	if( sr.hitAnObject == true ){
-		*color = sr.color;
+		return sr.color;
 	}
 	else{
-		*color = w->backgroundColor;
+		return w->backgroundColor;
+	}
+}
+
+__device__
+RGBColor RayCastTraceRay(World *w, Ray ray ,int depth){
+	ShadeRec sr;
+	sr.w = w;
+
+	HitObject(w,ray,&sr);
+
+	if( sr.hitAnObject ){
+		sr.ray = ray;
+		return Shade(sr.material,&sr);
+	}
+	else{
+		return w->backgroundColor;
 	}
 }

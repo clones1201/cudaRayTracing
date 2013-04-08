@@ -1,4 +1,5 @@
 #include "defines.cuh"
+#include "function_defines.cuh"
 
 __device__ inline
 Vector3D RayDirection(Pinhole *ph,Point2D p){
@@ -8,7 +9,7 @@ Vector3D RayDirection(Pinhole *ph,Point2D p){
 }
 
 __global__ 
-void PinholeRenderScene_k(World *w, RGBAColor *buffer){
+void PinholeRenderScene_k(World *w, RGBColor *buffer){
 	
 	Ray ray;
 	ViewPlane vp = *(w->vp);
@@ -28,8 +29,8 @@ void PinholeRenderScene_k(World *w, RGBAColor *buffer){
 
 	int numSample = getSampleNum(  vp.sampleScale  );
 
-	RGBAColor pixelColor = black;
-	buffer[offset] = w->backgroundColor;
+	RGBColor pixelColor = black;
+	buffer[offset] = black;
 	for(int i = 0 ; i < numSample ; ++ i ){
 			sp = getSampleUnitSquare( vp.samplerType , i , vp.sampleScale );
 
@@ -40,9 +41,9 @@ void PinholeRenderScene_k(World *w, RGBAColor *buffer){
 
 			ray.d = RayDirection(&pinhole,pp);
 
-			//Sphere*s;
-			multiObjTraceRay(w,ray,&pixelColor);
+			pixelColor = RayCastTraceRay(w,ray,0);
 			//singleSphereTraceRay(w,(Sphere*)*(w->object),ray,&pixelColor);
+			//pixelColor =multiObjTraceRay(w,ray);
 
 			buffer[offset] = buffer[offset] + pixelColor / numSample;
 			//buffer[offset] = w->backgroundColor;
@@ -51,9 +52,9 @@ void PinholeRenderScene_k(World *w, RGBAColor *buffer){
 }
 
 __global__
-	void render_scene_k(World *w,RGBAColor *buffer){
+	void render_scene_k(World *w,RGBColor *buffer){
 
-		RGBAColor pixelColor = red;
+		RGBColor pixelColor = red;
 		
 		Ray ray;
 				
@@ -85,7 +86,7 @@ __global__
 			ray.d = Vector3D(0,0,1);
 
 			//Sphere*s;
-			multiObjTraceRay(w,ray,&pixelColor);
+			pixelColor = multiObjTraceRay(w,ray);
 			//singleSphereTraceRay(w,(Sphere*)*(w->object),ray,&pixelColor);
 
 			buffer[offset] = buffer[offset] + pixelColor / numSample;
@@ -94,7 +95,7 @@ __global__
 }
 
 
-void render_scene(World *w,int width,int height,RGBAColor *buffer){
+void RenderScene(World *w,int width,int height,RGBColor *buffer){
 	
 	dim3 blockPerGrid(width/16,height/16);
 	dim3 threadPerBlock(16,16);
@@ -112,12 +113,10 @@ void render_scene(World *w,int width,int height,RGBAColor *buffer){
 		PinholeRenderScene_k<<<blockPerGrid,threadPerBlock>>>(w,buffer);
 		break;
 	default:
-
 		break;
 	}
 /* old version  *//* 
 	render_scene_k<<<blockPerGrid,threadPerBlock>>>(w,buffer);
 	cudaCheckErrors("render_scene_k failed...");
 	*/
-	cudaDeviceSynchronize();
 }

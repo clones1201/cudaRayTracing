@@ -7,7 +7,7 @@
 #include <string.h>
 
 // CUDA standard includes
-//#include <cuda_runtime.h>
+#include <cuda_runtime.h>
 #include <cuda_gl_interop.h>
 
 //#include <crt\device_runtime.h>
@@ -21,10 +21,11 @@
 //#include <rendercheck_gl.h>
 //#include <helper_cuda.h>
 //#include <helper_cuda_gl.h>
+#pragma comment(lib,"glew32.lib")
 
-#include "simpleSphere.cuh"
+#include "cudaRayTracing.cuh"
 
-const char *sSDKname = "simpleSphere";
+const char *sSDKname = "cudaRayTracing";
 
 static int wWidth = 512;
 static int wHeight = 512;
@@ -35,11 +36,10 @@ StopWatchInterface *timer = NULL;
 
 GLuint pbo = 0;		// OpenGL pixel buffer object
 struct cudaGraphicsResource *cuda_pbo_resource; // handles OpenGL-CUDA exchange
-World *w;
+World *h_w;
+World *d_w;
 
-extern "C" void whiteNoise(int x, int y);
-extern "C" void simpleSphere(World *w,int width,int height);
-
+void simpleSphere(World *w,int width,int height);
 
 void clearup();
 void reshape(int x, int y);
@@ -52,11 +52,11 @@ void display(void){
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	
-	simpleSphere(w,wWidth,wHeight);
+	simpleSphere(d_w,wWidth,wHeight);
 	//whiteNoise(512,512);
 
 	 // render points from vertex buffer
-	glDrawPixels(wWidth,wHeight,GL_RGBA,GL_UNSIGNED_BYTE,0);
+	glDrawPixels(wWidth,wHeight,GL_RGB,GL_UNSIGNED_BYTE,0);
 	    
 	fpsCount++;
 	sdkStopTimer(&timer);
@@ -66,7 +66,7 @@ void display(void){
     {
         char fps[256];
         float ifps = 1.f / (sdkGetAverageTimerValue(&timer) / 1000.f);
-        sprintf(fps, "Cuda/GL Simple Sphere (%d x %d): %3.1f fps", wWidth, wHeight, ifps);
+        sprintf(fps, "Cuda/GL Ray Tracing (%d x %d): %3.1f fps", wWidth, wHeight, ifps);
         glutSetWindowTitle(fps);
         fpsCount = 0;
         fpsLimit = (int)MAX(ifps, 1.f);
@@ -102,7 +102,7 @@ void reshape(int x, int y){
 int initGL(int argc,char *argv[]){
 
 	glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
     glutInitWindowSize(wWidth, wHeight);
     glutCreateWindow( "Render Simple Sphere" );
     glutDisplayFunc(display);
@@ -152,11 +152,28 @@ void initCuda(int devID){
 	
 	glGenBuffers(1,&pbo);
 	glBindBuffer( GL_PIXEL_UNPACK_BUFFER_ARB, pbo);
-	glBufferData( GL_PIXEL_UNPACK_BUFFER_ARB, wWidth * wHeight * sizeof(RGBAColor) , NULL , GL_DYNAMIC_DRAW_ARB );
+	glBufferData( GL_PIXEL_UNPACK_BUFFER_ARB, wWidth * wHeight * sizeof(RGBColor) , NULL , GL_DYNAMIC_DRAW_ARB );
 	
 	cudaGraphicsGLRegisterBuffer( &cuda_pbo_resource, pbo, cudaGraphicsMapFlagsNone);
 	cudaCheckErrors("cudaGraphicsGLRegisterBuffer failed");
 	
+}
+
+void simpleSphere(World *w,int width,int height){
+	uchar3* devPtr;
+	size_t size;
+	cudaGraphicsMapResources(1, &cuda_pbo_resource, NULL);	
+    cudaCheckErrors("cudaGraphicsMapResources failed");
+
+	cudaGraphicsResourceGetMappedPointer( (void**)&devPtr,
+												&size,
+												cuda_pbo_resource );	
+    cudaCheckErrors("cudaGraphicsResourceGetMappedPointer failed");
+	
+	cudaRayTracing(w,width,height,devPtr);
+    
+	cudaGraphicsUnmapResources(1, &cuda_pbo_resource, 0);
+    getLastCudaError("cudaGraphicsUnmapResources failed");
 }
 
 int main(int argc , char *argv[] ){
@@ -175,45 +192,30 @@ int main(int argc , char *argv[] ){
 	//w = (World*)malloc(sizeof(World));
 	initCuda(devID);
 
-	simpleSphere_init(&w,wWidth,wHeight);
+	cudaRayTracingInit(&h_w,&d_w,wWidth,wHeight);
 
-	World h_w;
-	cudaMemcpy(&h_w,w,sizeof(World),cudaMemcpyDeviceToHost);
-	cudaCheckErrors("h_w copy failed");
-/*
-	ViewPlane h_vp;
-	cudaMemcpy(&h_vp,h_w.vp,sizeof(ViewPlane),cudaMemcpyDeviceToHost);
-	cudaCheckErrors("h_vp copy failed");
-	h_w->vp = h_vp;
+	ViewPlane* h_vp = new ViewPlane;
+	World *h_wd = new World;
+	GeometricObject**h_obj = new GeometricObject*[4];
+	Light **h_l = new Light*[1];
+	Ambient *h_ab = new Ambient;
+	cudaMemcpy(h_wd,d_w,sizeof(World),cudaMemcpyDeviceToHost);
+	cudaMemcpy(h_vp,h_wd->vp,sizeof(ViewPlane),cudaMemcpyDeviceToHost);
+	cudaMemcpy(h_obj,h_wd->objects,4 * sizeof(GeometricObject*),cudaMemcpyDeviceToHost);
+	cudaMemcpy(h_l,h_wd->lights,1 * sizeof(Light*),cudaMemcpyDeviceToHost);
+	cudaMemcpy(h_ab,h_wd->ambient, sizeof(Ambient),cudaMemcpyDeviceToHost);
 
-	GeometricObject **object = (GeometricObject**)malloc(h_w.numObject * sizeof(GeometricObject*));
-	cudaMemcpy(object,h_w.object, h_w.numObject * sizeof(GeometricObject*) ,cudaMemcpyDeviceToHost);
-	cudaCheckErrors("object copy failed");
-	h_w.object = object;
-	
-	for( int i = 0 ; i < h_w.numObject ; ++i){
-		GeometricObject temp;
-		cudaMemcpy(&temp, *(h_w.object + i) , sizeof(GeometricObject) , cudaMemcpyDeviceToHost);
-		cudaCheckErrors("%d object copy failed",i);
+	Sphere *h_s1,*h_s2,*h_s3;
+	h_s1 = new Sphere;h_s2 = new Sphere;h_s3 = new Sphere;
+	cudaMemcpy(h_s1,h_obj[0],sizeof(Sphere),cudaMemcpyDeviceToHost);	
+	cudaMemcpy(h_s2,h_obj[1],sizeof(Sphere),cudaMemcpyDeviceToHost);	
+	cudaMemcpy(h_s3,h_obj[2],sizeof(Sphere),cudaMemcpyDeviceToHost);
 
-		Sphere *h_s = (Sphere*)malloc(sizeof(Sphere));
-		Plane *h_p = (Plane*)malloc(sizeof(Plane));
-		switch( temp.type ){
-		case GMO_TYPE_SPHERE:
-			cudaMemcpy(h_s,  *(h_w.object + i) , sizeof(Sphere) , cudaMemcpyDeviceToHost);
-			*(h_w.object + i) = (GeometricObject*) h_s;
-			free(h_p);
-			break;
-		case GMO_TYPE_PLANE:
-			cudaMemcpy(&h_p,  *(h_w.object + i) , sizeof(Plane) , cudaMemcpyDeviceToHost);
-			*(h_w.object + i) = (GeometricObject*) h_p;			
-			free(h_s);
-			break;
-		default:
-			free(h_s);free(h_p);
-			break;
-		}
-	}*/
+	Plane *h_p = new Plane;
+	cudaMemcpy(h_p,h_obj[3],sizeof(Plane),cudaMemcpyDeviceToHost);
+
+	PointLight *h_pl = new PointLight;
+	cudaMemcpy(h_pl,h_l[0],sizeof(PointLight),cudaMemcpyDeviceToHost);
 
 	glutMainLoop();
 

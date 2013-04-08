@@ -3,29 +3,33 @@
 
 #include "Tools.cuh"
 
-/* Sampler Definition */
-typedef int SamplerType;
-#define SAMPLER_PURERANDOM		0
-#define SAMPLER_REGULAR			1
-#define SAMPLER_JITTERED		2
-#define SAMPLER_NROOKS			3
-#define SAMPLER_MULTIJITTERED	4
-#define SAMPLER_HAMMERSLEY		5
-
-typedef int SampleScale;
-#define SAMPLE_SCALE_1		0
-#define SAMPLE_SCALE_4		1
-#define SAMPLE_SCALE_16		2
-#define SAMPLE_SCALE_64		3
-#define SAMPLE_SCALE_256	4
-
-
 /* struture definition */
 struct Ray;
+
+struct GeometricObject;
 struct Sphere;
+struct Plane;
+
+struct Camara;
+struct Pinhole;
+
+struct BRDF;
+struct Lambertian;
+struct PerfectSpecular;
+struct GlossySpecular;
+
+struct Light;
+struct Directional;
+struct PointLight;
+
+struct Material;
+struct Matte;
+struct Phong;
+
 struct ShadeRec;
 struct ViewPlane;
 struct World;
+
 
 struct Ray{
 	Point3D o;
@@ -38,25 +42,24 @@ typedef int GeometricObjectType;
 #define GMO_TYPE_SPHERE		1
 #define GMO_TYPE_PLANE		2
 
-__device__ static const int size_of_geometricObj[] = {
-	17,25
-};
-
 struct GeometricObject{
 	GeometricObjectType type;
-	RGBAColor color;
+	RGBColor color;
+	Material* material;
 };
 
 struct Sphere{
 	GeometricObjectType type;
-	RGBAColor color;
+	RGBColor color;	
+	Material* material;
 	Point3D	center;
 	float radius;
 };
 
 struct Plane{	
 	GeometricObjectType type;
-	RGBAColor color;
+	RGBColor color;	
+	Material* material;
 	Point3D point;
 	Normal normal;
 };
@@ -89,13 +92,118 @@ struct Pinhole{
 };
 
 /************************/
+/*****  BRDF  ******/
+typedef int BRDFType;
 
+#define	BRDF_TYPE_LAMBERTIAN        0
+#define BRDF_TYPE_PERFECTSPECULAR   1
+#define BRDF_TYPE_GLOSSYSPECULAR    2
+
+struct BRDF{
+	BRDFType type;
+};
+
+struct Lambertian{    
+	BRDFType type;
+	float kd;
+	RGBColor cd;
+};
+
+struct PerfectSpecular{
+	BRDFType type;
+};
+
+struct GlossySpecular{
+	BRDFType type;
+};
+
+/********************/
+/***** Light *****/
+typedef int LightType;
+#define LIGHT_TYPE_AMBIENT       0
+#define LIGHT_TYPE_DIRECTIONAL   1
+#define LIGHT_TYPE_POINTLIGHT    2
+
+struct Light{
+	LightType type;
+	bool shadows;
+};
+
+struct Ambient{
+	LightType type;
+	bool shadows;
+
+	float ls;
+	RGBColor color;
+};
+
+struct Directional{
+	LightType type;
+	bool shadows;
+	
+	float ls;
+	RGBColor color;
+	Vector3D dir;
+};
+
+struct PointLight{
+	LightType type;
+	bool shadows;
+
+	float ls;
+	RGBColor color;
+	Point3D pos;
+};
+
+/****************/
+/*   Material   */
+typedef int MaterialType;
+#define MATERIAL_TYPE_MATTE		0
+#define MATERIAL_TYPE_PHONG		1
+
+struct Material{
+	MaterialType type;
+};
+
+struct Matte{
+	MaterialType type;
+	Lambertian ambientBRDF;
+	Lambertian diffuseBRDF;
+};
+
+struct Phong{
+	MaterialType type;
+};
+
+/****************/
 struct ShadeRec{
 	bool hitAnObject;
+	Material *material;
+	Point3D hitPoint;
 	Point3D localHitPoint;
 	Normal normal;
-	RGBAColor color;	
+	RGBColor color;//only used in chapter 3
+	Ray ray;
+	int depth;
+	Vector3D dir;
+	World *w;
 };
+
+/* Sampler Definition */
+typedef int SamplerType;
+#define SAMPLER_PURERANDOM		0
+#define SAMPLER_REGULAR			1
+#define SAMPLER_JITTERED		2
+#define SAMPLER_NROOKS			3
+#define SAMPLER_MULTIJITTERED	4
+#define SAMPLER_HAMMERSLEY		5
+
+typedef int SampleScale;
+#define SAMPLE_SCALE_1		0
+#define SAMPLE_SCALE_4		1
+#define SAMPLE_SCALE_16		2
+#define SAMPLE_SCALE_64		3
+#define SAMPLE_SCALE_256	4
 
 struct ViewPlane{
 public:
@@ -111,69 +219,18 @@ public:
 
 struct World{
 public:
-	GeometricObject **object;
+	GeometricObject **objects;
 	int numObject;
+	Light **lights;
+	int numLight;
+
+	Light *ambient;
+
 	ViewPlane *vp;
-	RGBAColor backgroundColor;
+	RGBColor backgroundColor;
 //	Sphere *sphere;
 	Camara *camara;
+
 };
-
-
-/*Tracer function */
-
-extern __device__  
-void singleSphereTraceRay(World *w,Sphere *s,Ray ray,RGBAColor *color);
-
-extern __device__
-void multiObjTraceRay(World *w, Ray ray, RGBAColor *color);
-
-/* Geometric Object function */
-extern __device__   
-bool sphereHit(Sphere *sphere, Ray ray,float *tmin, ShadeRec *sr);
-
-extern __device__
-bool planeHit(Plane *plane,Ray ray, float *tmin, ShadeRec *sr);
-
-extern __host__
-void initPlane(Plane **pl, Point3D p,Normal n,RGBAColor color);
-
-extern __host__
-void initSphere(Sphere **s, Point3D c, float r,RGBAColor color);
-
-extern __host__
-void freePlane(Plane **pl);
-
-extern __host__
-void freeSphere(Sphere **s);
-
-/* Sampler function */
-
-extern __device__ inline
-Point2D	getSampleUnitSquare(SamplerType type, int idx,SampleScale scale);
-
-extern __device__ __host__ inline
-int getSampleNum(SampleScale scale);
-
-extern __device__ __host__ inline
-SampleScale getSampleScale(int num);
-
-
-/* World function */
-extern void build_world(World **w);
-
-extern void hitBareBonesObject(World *w, Ray ray,ShadeRec *sr);
-
-/* camara function */
-__device__ __host__ inline
-void ComputeUVW(Camara *c){
-	c->w = c->eye - c->lookat;
-	c->w = Normalize( c->w );
-	c->u = CrossProduct( c->up , c->w );
-	c->u = Normalize( c->u );
-	c->v = CrossProduct( c->w , c->u );
-}
-
-extern void RenderScene(World *w, Camara *c, int width,int height, RGBAColor *buffer);
 
 #endif

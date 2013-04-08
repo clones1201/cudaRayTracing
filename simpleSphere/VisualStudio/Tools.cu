@@ -86,6 +86,14 @@ Vector3D Normalize(const Vector3D &param){
 	result.z = param.z / norm;
 	return result;
 }
+
+
+__device__ __host__ inline 
+float Distance(const Point3D &param1,const Point3D &param2){
+	return ( sqrtf( (param1.x - param2.x ) * ( param1.x - param2.x ) 
+		+ ( param1.y - param2.y ) * ( param1.y - param2.y )
+		+ ( param1.z - param2.z ) * ( param1.z - param2.z ) ));
+}
 /*
 // operator of Point
 __device__ __host__ inline 
@@ -115,40 +123,142 @@ Vector3D operator-(const Point3D& param1, const Point3D& param2){
 */
 
 __device__ __host__ inline 
-RGBAColor operator+(const RGBAColor& param1, const RGBAColor &param2){
-	RGBAColor result;
-	result.x = param1.x + param2.x;
-	result.y = param1.y + param2.y;
-	result.z = param1.z + param2.z;
-	result.w = param1.w + param2.w;
-	return result;
-}
-__device__ __host__ inline 
-RGBAColor operator-(const RGBAColor& param1, const RGBAColor &param2){
-	RGBAColor result;
-	result.x = param1.x - param2.x;
-	result.y = param1.y - param2.y;
-	result.z = param1.z - param2.z;
-	result.w = param1.w - param2.w;
+RGBColor operator+(const RGBColor& param1, const RGBColor &param2){
+	RGBColor result;
+	int tempX = param1.x + param2.x;
+	int	tempY = param1.y + param2.y;
+	int tempZ = param1.z + param2.z;
+
+	if( tempX > 255 ){
+		result.x = 255;
+	}else if( tempY < 0 ){
+		result.y = 0;
+	}else{ result.x = tempX;}
+	
+	if( tempY > 255 ){
+		result.y = 255;
+	}else if( tempY < 0 ){
+		result.y = 0;
+	}else{ result.y = tempY;}
+	
+	if( tempZ > 255 ){
+		result.z = 255;
+	}else if( tempZ < 0 ){
+		result.z = 0;
+	}else{ result.z = tempZ;}
 	
 	return result;
 }
+
 __device__ __host__ inline 
-RGBAColor operator*(const RGBAColor& param1, const float &param2){
-	RGBAColor result;
-	result.x = param1.x * param2;
-	result.y = param1.y * param2;
-	result.z = param1.z * param2;
-	result.w = param1.w * param2;
+RGBColor operator-(const RGBColor& param1, const RGBColor &param2){
+	RGBColor result;
+	int tempX = param1.x - param2.x;
+	int tempY = param1.y - param2.y;
+	int tempZ = param1.z - param2.z;
+	
+	if( tempX > 255 ){
+		result.x = 255;
+	}else if( tempY < 0 ){
+		result.y = 0;
+	}else{ result.x = tempX;}
+	
+	if( tempY > 255 ){
+		result.y = 255;
+	}else if( tempY < 0 ){
+		result.y = 0;
+	}else{ result.y = tempY;}
+	
+	if( tempZ > 255 ){
+		result.z = 255;
+	}else if( tempZ < 0 ){
+		result.z = 0;
+	}else{ result.z = tempZ;}
+	
 	return result;
 }
+
 __device__ __host__ inline 
-RGBAColor operator/(const RGBAColor& param1, const float &param2){
-	RGBAColor result;
-	result.x = param1.x / param2;
-	result.y = param1.y / param2;
-	result.z = param1.z / param2;
-	result.w = param1.w / param2;
+RGBColor operator*(const RGBColor& param1, const float &param2){
+	RGBColor result;
+	int tempX = param1.x * param2;
+	int tempY = param1.y * param2;
+	int tempZ = param1.z * param2;
+
+	if( tempX > 255 ){
+		result.x = 255;
+	}else if( tempY < 0 ){
+		result.y = 0;
+	}else{ result.x = tempX;}
+	
+	if( tempY > 255 ){
+		result.y = 255;
+	}else if( tempY < 0 ){
+		result.y = 0;
+	}else{ result.y = tempY;}
+	
+	if( tempZ > 255 ){
+		result.z = 255;
+	}else if( tempZ < 0 ){
+		result.z = 0;
+	}else{ result.z = tempZ;}
+	
+	return result;
+}
+
+__device__ __host__ inline 
+RGBColor operator*(const RGBColor& param1, const RGBColor &param2){
+	RGBColor result;
+	int tempX = param1.x * param2.x;
+	int tempY = param1.y * param2.y;
+	int tempZ = param1.z * param2.z;
+
+	if( tempX > 255 ){
+		result.x = 255;
+	}else if( tempY < 0 ){
+		result.y = 0;
+	}else{ result.x = tempX;}
+	
+	if( tempY > 255 ){
+		result.y = 255;
+	}else if( tempY < 0 ){
+		result.y = 0;
+	}else{ result.y = tempY;}
+	
+	if( tempZ > 255 ){
+		result.z = 255;
+	}else if( tempZ < 0 ){
+		result.z = 0;
+	}else{ result.z = tempZ;}
+	
+	return result;
+}
+
+__device__ __host__ inline 
+RGBColor operator/(const RGBColor& param1, const float &param2){
+	RGBColor result;
+	int tempX = param1.x / param2;
+	int tempY = param1.y / param2;
+	int tempZ = param1.z / param2;
+
+	if( tempX > 255 ){
+		result.x = 255;
+	}else if( tempY < 0 ){
+		result.y = 0;
+	}else{ result.x = tempX;}
+	
+	if( tempY > 255 ){
+		result.y = 255;
+	}else if( tempY < 0 ){
+		result.y = 0;
+	}else{ result.y = tempY;}
+	
+	if( tempZ > 255 ){
+		result.z = 255;
+	}else if( tempZ < 0 ){
+		result.z = 0;
+	}else{ result.z = tempZ;}
+	
 	return result;
 }
 

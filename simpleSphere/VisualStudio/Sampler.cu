@@ -1,5 +1,7 @@
-#include "defines.cuh"
 #include "Tools.cuh"
+#include "defines.cuh"
+#include "function_defines.cuh"
+
 
 __device__ inline void sampler_PureRandom	( Point2D *p, int Idx, int num );
 __device__ inline void sampler_Regular		( Point2D *p, int Idx, int num );
