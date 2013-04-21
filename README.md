@@ -9,4 +9,4 @@ developing with NVIDIA GPU Computeing Toolkit 5.0,freeglut2.80, Glew1.9, and Vis
 
 platform : Windows 8 pro, NVIDIA GTX260
 
-![3 sphere, pinhole camara](https://lh3.googleusercontent.com/-eJByNtlhVNU/UWKyosJ728I/AAAAAAAAAGo/GU0bhp7dlLU/s551/%E5%85%89%E7%BA%BF%E6%8A%95%E5%B0%84%EF%BC%8C%E9%98%B4%E5%BD%B1%EF%BC%8C4%E7%82%B9%E6%8A%96%E5%8A%A8%E9%87%87%E6%A0%B7%EF%BC%8C%E9%92%88%E5%AD%94%E9%95%9C%E5%A4%B4.jpg)
+![3 sphere, pinhole camara，Phong](https://lh6.googleusercontent.com/-ewQZtsKKGIA/UXQKeL4ok3I/AAAAAAAAAHM/sH24u5MpLrI/s503/Phong%E6%9D%90%E8%B4%A8%EF%BC%8C3%E4%B8%AA%E7%90%83%E4%BD%93%EF%BC%8C%E4%BF%AE%E6%AD%A3%E4%BA%86%E9%A2%9C%E8%89%B2%E8%AE%A1%E7%AE%97%E7%9A%84%E9%94%99%E8%AF%AF.jpg)
