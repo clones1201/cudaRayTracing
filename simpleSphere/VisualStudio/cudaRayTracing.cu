@@ -21,7 +21,7 @@ void cudaRayTracingInit(World **h_w,World **d_w,int width,int height){
 	BuildWorld(h_w,d_w,width,height);
 }
 
-void cudaRayTracing(World *w, int width, int height, RGBColor *buffer){
+void cudaRayTracing(World *w, int width, int height, uchar3 *buffer){
 	RenderScene( w, width, height, buffer);
 	cudaDeviceSynchronize();
 }

@@ -23,7 +23,16 @@ RGBColor PerfectSpecularRho(PerfectSpecular *ps, ShadeRec *sr, Vector3D *wo){
 
 __device__ inline
 RGBColor GlossySpecularF(GlossySpecular *gs, ShadeRec *sr, Vector3D *wi, Vector3D *wo){
-	return (black);//temp value
+	RGBColor result;
+	float ndotwi = sr->normal * (*wi);
+	Vector3D r = ( Vector3D(0,0,0) - *wi ) + sr->normal * 2.0 * ndotwi;
+	float rdotwo = r * (*wo);
+	
+	if( rdotwo > 0.001 ){
+		float l = gs->ks * powf(rdotwo,gs->exp);
+		result = RGBColor(l,l,l);
+	}
+	return (result);//temp value
 }
 
 __device__ inline

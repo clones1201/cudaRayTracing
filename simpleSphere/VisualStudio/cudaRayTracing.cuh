@@ -45,6 +45,6 @@ __global__ void whiteNoise_k( uchar3 *ptr );
 
 void cudaRayTracingInit(World **h_w, World **d_w, int width, int height);
 
-void cudaRayTracing(World *w,int width, int height, RGBColor *buffer);
+void cudaRayTracing(World *w,int width, int height, uchar3 *buffer);
 
 #endif

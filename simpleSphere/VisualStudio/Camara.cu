@@ -9,7 +9,7 @@ Vector3D RayDirection(Pinhole *ph,Point2D p){
 }
 
 __global__ 
-void PinholeRenderScene_k(World *w, RGBColor *buffer){
+void PinholeRenderScene_k(World *w, uchar3 *buffer){
 	
 	Ray ray;
 	ViewPlane vp = *(w->vp);
@@ -30,7 +30,7 @@ void PinholeRenderScene_k(World *w, RGBColor *buffer){
 	int numSample = getSampleNum(  vp.sampleScale  );
 
 	RGBColor pixelColor = black;
-	buffer[offset] = black;
+	buffer[offset] = make_uchar3(0,0,0);
 	for(int i = 0 ; i < numSample ; ++ i ){
 			sp = getSampleUnitSquare( vp.samplerType , i , vp.sampleScale );
 
@@ -41,18 +41,16 @@ void PinholeRenderScene_k(World *w, RGBColor *buffer){
 
 			ray.d = RayDirection(&pinhole,pp);
 
-			pixelColor = RayCastTraceRay(w,ray,0);
+			pixelColor = pixelColor + RayCastTraceRay(w,ray,0) / numSample;
 			//singleSphereTraceRay(w,(Sphere*)*(w->object),ray,&pixelColor);
 			//pixelColor =multiObjTraceRay(w,ray);
-
-			buffer[offset] = buffer[offset] + pixelColor / numSample;
-			//buffer[offset] = w->backgroundColor;
 		}
+	buffer[offset] = MapToUchar(pixelColor);
 
 }
-
+/*
 __global__
-	void render_scene_k(World *w,RGBColor *buffer){
+	void render_scene_k(World *w,uchar3 *buffer){
 
 		RGBColor pixelColor = red;
 		
@@ -93,9 +91,9 @@ __global__
 			//buffer[offset] = w->backgroundColor;
 		}
 }
+*/
 
-
-void RenderScene(World *w,int width,int height,RGBColor *buffer){
+void RenderScene(World *w,int width,int height,uchar3 *buffer){
 	
 	dim3 blockPerGrid(width/16,height/16);
 	dim3 threadPerBlock(16,16);

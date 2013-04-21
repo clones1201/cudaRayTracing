@@ -115,6 +115,9 @@ struct PerfectSpecular{
 
 struct GlossySpecular{
 	BRDFType type;
+	float ks;
+	int exp;
+//	RGBColor cs;
 };
 
 /********************/
@@ -173,6 +176,9 @@ struct Matte{
 
 struct Phong{
 	MaterialType type;
+	Lambertian ambientBRDF;
+	Lambertian diffuseBRDF;
+	GlossySpecular specularBRDF;
 };
 
 /****************/

@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="simpleSphere.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="CUDA">
       <UniqueIdentifier>{489dcc18-478a-49e4-9f57-af9919ed6343}</UniqueIdentifier>
     </Filter>
@@ -15,11 +12,13 @@
     <None Include="Tools.cuh">
       <Filter>CUDA\header</Filter>
     </None>
-    <None Include="simpleSphere.cuh">
+    <None Include="defines.cuh">
       <Filter>CUDA\header</Filter>
     </None>
-    <None Include="simpleSphere.sdf" />
-    <None Include="defines.cuh">
+    <None Include="cudaRayTracing.cuh">
+      <Filter>CUDA\header</Filter>
+    </None>
+    <None Include="function_defines.cuh">
       <Filter>CUDA\header</Filter>
     </None>
   </ItemGroup>
@@ -31,9 +30,6 @@
       <Filter>CUDA</Filter>
     </CudaCompile>
     <CudaCompile Include="GeometricObject.cu">
-      <Filter>CUDA</Filter>
-    </CudaCompile>
-    <CudaCompile Include="simpleSphere.cu">
       <Filter>CUDA</Filter>
     </CudaCompile>
     <CudaCompile Include="ShadeRec.cu">
@@ -51,5 +47,23 @@
     <CudaCompile Include="Sampler.cu">
       <Filter>CUDA</Filter>
     </CudaCompile>
+    <CudaCompile Include="Camara.cu">
+      <Filter>CUDA</Filter>
+    </CudaCompile>
+    <CudaCompile Include="cudaRayTracing.cu">
+      <Filter>CUDA</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Light.cu">
+      <Filter>CUDA</Filter>
+    </CudaCompile>
+    <CudaCompile Include="BRDF.cu">
+      <Filter>CUDA</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Material.cu">
+      <Filter>CUDA</Filter>
+    </CudaCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
 </Project>

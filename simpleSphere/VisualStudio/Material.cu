@@ -5,7 +5,7 @@ __device__ inline
 RGBColor MatteShade(Matte *m, ShadeRec *sr){
 	Vector3D wo = Vector3D(0,0,0) - sr->ray.d;
 
-	RGBColor result = Rho((BRDF*)&(m->ambientBRDF),sr,&wo) * L(sr->w->ambient,sr);
+	RGBColor result = powc( Rho((BRDF*)&(m->ambientBRDF),sr,&wo) , L(sr->w->ambient,sr));
 	//RGBColor result = red * 0.25 * white;
 
 	for(int j = 0; j < sr->w->numLight ; ++j ){
@@ -21,7 +21,7 @@ RGBColor MatteShade(Matte *m, ShadeRec *sr){
 			}
 
 			if(!isShadow){
-				result = result + F((BRDF*)&(m->diffuseBRDF),sr,&wo,&wi) * L(sr->w->lights[j],sr) * ndotwi;
+				result = result + powc(F((BRDF*)&(m->diffuseBRDF),sr,&wo,&wi) , L(sr->w->lights[j],sr)) * ndotwi;
 			}
 		}
 	}
@@ -30,7 +30,30 @@ RGBColor MatteShade(Matte *m, ShadeRec *sr){
 
 __device__ inline
 RGBColor PhongShade(Phong *pg, ShadeRec *sr){
-	return black;//temp value
+	Vector3D wo = Vector3D(0,0,0) - sr->ray.d;
+	RGBColor result = powc( Rho((BRDF*)&(pg->ambientBRDF),sr,&wo) , L(sr->w->ambient,sr) );
+
+	for(int j = 0; j < sr->w->numLight ; ++j ){
+		Vector3D wi = GetDirection((sr->w->lights[j]),sr);
+		float ndotwi = sr->normal * wi;
+		
+		if( ndotwi > 0.01 ){
+			bool isShadow = false;
+
+			if( sr->w->lights[j]->shadows ){
+				Ray shadowRay;
+				shadowRay.d = wi;shadowRay.o = sr->hitPoint;
+				isShadow = inShadow(sr->w->lights[j],shadowRay,sr);
+			}
+
+			if(!isShadow){
+				result = result + 
+					powc ( (F((BRDF*)&(pg->diffuseBRDF),sr,&wo,&wi) + F((BRDF*)&(pg->specularBRDF),sr,&wo,&wi)),
+						L(sr->w->lights[j],sr))  * ndotwi;
+			}
+		}
+	}
+	return result;
 }
 
 __device__

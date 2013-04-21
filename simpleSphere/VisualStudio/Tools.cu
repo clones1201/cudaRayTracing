@@ -121,147 +121,79 @@ Vector3D operator-(const Point3D& param1, const Point3D& param2){
 	return result;
 }
 */
-
+/*
 __device__ __host__ inline 
 RGBColor operator+(const RGBColor& param1, const RGBColor &param2){
 	RGBColor result;
-	int tempX = param1.x + param2.x;
-	int	tempY = param1.y + param2.y;
-	int tempZ = param1.z + param2.z;
-
-	if( tempX > 255 ){
-		result.x = 255;
-	}else if( tempY < 0 ){
-		result.y = 0;
-	}else{ result.x = tempX;}
-	
-	if( tempY > 255 ){
-		result.y = 255;
-	}else if( tempY < 0 ){
-		result.y = 0;
-	}else{ result.y = tempY;}
-	
-	if( tempZ > 255 ){
-		result.z = 255;
-	}else if( tempZ < 0 ){
-		result.z = 0;
-	}else{ result.z = tempZ;}
-	
+	result.x = param1.x + param2.x;
+	result.y = param1.y + param2.y;
+	result.z = param1.z + param2.z;
 	return result;
 }
 
 __device__ __host__ inline 
 RGBColor operator-(const RGBColor& param1, const RGBColor &param2){
 	RGBColor result;
-	int tempX = param1.x - param2.x;
-	int tempY = param1.y - param2.y;
+	result.x = param1.x - param2.x;
+	result.y = param1.y - param2.y;
 	int tempZ = param1.z - param2.z;
-	
-	if( tempX > 255 ){
-		result.x = 255;
-	}else if( tempY < 0 ){
-		result.y = 0;
-	}else{ result.x = tempX;}
-	
-	if( tempY > 255 ){
-		result.y = 255;
-	}else if( tempY < 0 ){
-		result.y = 0;
-	}else{ result.y = tempY;}
-	
-	if( tempZ > 255 ){
-		result.z = 255;
-	}else if( tempZ < 0 ){
-		result.z = 0;
-	}else{ result.z = tempZ;}
 	
 	return result;
 }
-
+*//*
 __device__ __host__ inline 
 RGBColor operator*(const RGBColor& param1, const float &param2){
 	RGBColor result;
-	int tempX = param1.x * param2;
-	int tempY = param1.y * param2;
-	int tempZ = param1.z * param2;
+	result.x = param1.x * param2;
+	result.y = param1.y * param2;
+	result.z = param1.z * param2;
 
-	if( tempX > 255 ){
-		result.x = 255;
-	}else if( tempY < 0 ){
-		result.y = 0;
-	}else{ result.x = tempX;}
-	
-	if( tempY > 255 ){
-		result.y = 255;
-	}else if( tempY < 0 ){
-		result.y = 0;
-	}else{ result.y = tempY;}
-	
-	if( tempZ > 255 ){
-		result.z = 255;
-	}else if( tempZ < 0 ){
-		result.z = 0;
-	}else{ result.z = tempZ;}
-	
 	return result;
 }
-
+*/
 __device__ __host__ inline 
-RGBColor operator*(const RGBColor& param1, const RGBColor &param2){
+RGBColor powc(const RGBColor& param1, const RGBColor &param2){
 	RGBColor result;
-	int tempX = param1.x * param2.x;
-	int tempY = param1.y * param2.y;
-	int tempZ = param1.z * param2.z;
-
-	if( tempX > 255 ){
-		result.x = 255;
-	}else if( tempY < 0 ){
-		result.y = 0;
-	}else{ result.x = tempX;}
-	
-	if( tempY > 255 ){
-		result.y = 255;
-	}else if( tempY < 0 ){
-		result.y = 0;
-	}else{ result.y = tempY;}
-	
-	if( tempZ > 255 ){
-		result.z = 255;
-	}else if( tempZ < 0 ){
-		result.z = 0;
-	}else{ result.z = tempZ;}
-	
+	result.x = param1.x * param2.x;
+	result.y = param1.y * param2.y;
+	result.z = param1.z * param2.z;
 	return result;
 }
-
+/*
 __device__ __host__ inline 
 RGBColor operator/(const RGBColor& param1, const float &param2){
 	RGBColor result;
-	int tempX = param1.x / param2;
-	int tempY = param1.y / param2;
-	int tempZ = param1.z / param2;
+	result.x = param1.x / param2;
+	result.y = param1.y / param2;
+	result.z = param1.z / param2;
 
-	if( tempX > 255 ){
-		result.x = 255;
-	}else if( tempY < 0 ){
-		result.y = 0;
-	}else{ result.x = tempX;}
-	
-	if( tempY > 255 ){
-		result.y = 255;
-	}else if( tempY < 0 ){
-		result.y = 0;
-	}else{ result.y = tempY;}
-	
-	if( tempZ > 255 ){
-		result.z = 255;
-	}else if( tempZ < 0 ){
-		result.z = 0;
-	}else{ result.z = tempZ;}
-	
 	return result;
 }
+*/
+__device__ __host__ inline 
+uchar3 MapToUchar(const RGBColor& param){
+	uchar3 result;
+	result.x = param.x * 255;
+	result.y = param.y * 255;
+	result.z = param.z * 255;
 
+	if( param.x > 1.0 ){
+		result.x = 255;
+	}else if( param.x < 0.0 ){
+		result.x = 0;
+	}
+	if( param.y > 1.0 ){
+		result.y = 255;
+	}else if( param.x < 0.0 ){
+		result.y = 0;
+	}
+	if( param.z > 1.0 ){
+		result.z = 255;
+	}else if( param.x < 0.0 ){
+		result.z = 0;
+	}
+	return result;
+}
 /* pseudo random number generator */
 /*  linear congruential  */
 __device__

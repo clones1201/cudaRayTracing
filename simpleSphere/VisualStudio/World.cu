@@ -152,27 +152,41 @@ void BuildWorld(World **h_w, World **d_w, int width,int height){
 	(*h_w)->vp->samplerType = SAMPLER_JITTERED;
 	(*h_w)->vp->sampleScale = SAMPLE_SCALE_4;
 
-	(*h_w)->backgroundColor = RGBColor(10,10,40);
+	(*h_w)->backgroundColor = RGBColor(5,5,30);
 
 	/* GeometricObject
 	*/
-	(*h_w)->numObject = 4;
+	(*h_w)->numObject = 5;
 	(*h_w)->objects = (GeometricObject **)malloc((*h_w)->numObject * sizeof(GeometricObject*));
 
 	Matte *material1 = newMatte(0.25,0.65,red);	
-	Matte *material2 = newMatte(0.25,0.65,green);	
-	Matte *material3 = newMatte(0.25,0.65,yellow);	
-	Matte *material4 = newMatte(0.25,0.65,blue);
+	Phong *material2 = newPhong(0.25,0.6,green,0.2,20);	
+	Phong *material3 = newPhong(0.25,0.6,yellow,0.2,20);	
+	Matte *material4 = newMatte(0.25,0.65,white);
+	Phong *material5 = newPhong(0.25,0.6,red,0.2,20);
 
-	initSphere( ((Sphere**)((*h_w)->objects)),		Point3D(0,120,280),	120,	(Material*)material1		);
+	initSphere( ((Sphere**)((*h_w)->objects)),		Point3D(0,120,280),	120,	(Material*)material5		);
 	initSphere( ((Sphere**)((*h_w)->objects+1)),	Point3D(0,150,0),	150,		(Material*)material2		);
 	initSphere( ((Sphere**)((*h_w)->objects+2)),	Point3D(210,100,100),	100,		(Material*)material3	);
 	initPlane( ((Plane**)((*h_w)->objects+3)),	Point3D(0,0,0),	Normal(0,1,0),		(Material*)material4		);
+	initPlane( ((Plane**)((*h_w)->objects+4)),	Point3D(-600,0,-600),	Normal(1,0,1),		(Material*)material4);
 
+/*	(*h_w)->numObject = 100;
+	(*h_w)->objects = (GeometricObject **)malloc((*h_w)->numObject * sizeof(GeometricObject*));
+	Matte *material = newMatte(0.25,0.65,red);
+	Matte *material4 = newMatte(0.25,0.65,RGBColor(5,5,40));
+
+	initPlane(  ((Plane**)((*h_w)->objects )),	Point3D(-600,0,-600),	Normal(1,0,1),		(Material*)material4		);
+	for( int i = 1 ; i < (*h_w)->numObject ; ++ i ){
+		initSphere( ((Sphere**)((*h_w)->objects + i )), 
+			Point3D( 400 * float(rand())/float(RAND_MAX) , 400 * float(rand())/float(RAND_MAX) , 400 * float(rand())/float(RAND_MAX) ),
+			35 * float(rand())/float(RAND_MAX) + 5 , (Material*)material); 
+	}*/
+	
 	Pinhole *pinhole = (Pinhole*)malloc(sizeof(Pinhole));
 	pinhole->type = CAMARA_TYPE_PINHOLE;
-	pinhole->eye = Point3D(300,600,500);
-	pinhole->lookat = Point3D(0,100,0);
+	pinhole->eye = Point3D(500,300,300);
+	pinhole->lookat = Point3D(0,100,100);
 	pinhole->up = Vector3D(0,1,0);
 	pinhole->viewDistance = 400;
 	pinhole->zoom = 1;
@@ -182,7 +196,7 @@ void BuildWorld(World **h_w, World **d_w, int width,int height){
 	/* Light
 	*/
 	Ambient *h_ab = (Ambient*)malloc(sizeof(Ambient));
-	h_ab->ls = 0.01;
+	h_ab->ls = 0.5;
 	h_ab->color = white;
 	h_ab->shadows = false;
 	h_ab->type = LIGHT_TYPE_AMBIENT;
@@ -193,8 +207,8 @@ void BuildWorld(World **h_w, World **d_w, int width,int height){
 	(*h_w)->lights = (Light**)malloc( (*h_w)->numLight * sizeof(Light*) );
 	
 	PointLight *h_pl = (PointLight*)malloc(sizeof(PointLight));
-	h_pl->ls = 2.5;
-	h_pl->pos = Point3D(50,900,200);
+	h_pl->ls = 1;
+	h_pl->pos = Point3D(1000,400,1200);
 	h_pl->color = white;
 	h_pl->shadows = true;
 	h_pl->type = LIGHT_TYPE_POINTLIGHT;

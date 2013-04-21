@@ -101,6 +101,26 @@ Matte* newMatte(float ka,float kd,RGBColor cd){
 	return result;
 }
 
+__device__ __host__ inline
+Phong* newPhong( float ka, float kd, RGBColor cd , float ks, int exp ){
+	Phong *result = (Phong*)malloc(sizeof(Phong));
+	
+	result->ambientBRDF.type = BRDF_TYPE_LAMBERTIAN;
+	result->diffuseBRDF.type = BRDF_TYPE_LAMBERTIAN;
+	result->specularBRDF.type = BRDF_TYPE_GLOSSYSPECULAR;
+
+	result->ambientBRDF.kd = ka;
+	result->diffuseBRDF.kd = kd;
+	result->ambientBRDF.cd = cd;
+	result->diffuseBRDF.cd = cd;
+	result->specularBRDF.ks = ks;
+	result->specularBRDF.exp = exp;
+
+	result->type = MATERIAL_TYPE_PHONG;
+
+	return result;
+}
+
 extern __device__
 RGBColor Shade(Material *m,ShadeRec *sr);
 

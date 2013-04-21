@@ -152,7 +152,7 @@ void initCuda(int devID){
 	
 	glGenBuffers(1,&pbo);
 	glBindBuffer( GL_PIXEL_UNPACK_BUFFER_ARB, pbo);
-	glBufferData( GL_PIXEL_UNPACK_BUFFER_ARB, wWidth * wHeight * sizeof(RGBColor) , NULL , GL_DYNAMIC_DRAW_ARB );
+	glBufferData( GL_PIXEL_UNPACK_BUFFER_ARB, wWidth * wHeight * sizeof(uchar3) , NULL , GL_DYNAMIC_DRAW_ARB );
 	
 	cudaGraphicsGLRegisterBuffer( &cuda_pbo_resource, pbo, cudaGraphicsMapFlagsNone);
 	cudaCheckErrors("cudaGraphicsGLRegisterBuffer failed");
@@ -193,29 +193,6 @@ int main(int argc , char *argv[] ){
 	initCuda(devID);
 
 	cudaRayTracingInit(&h_w,&d_w,wWidth,wHeight);
-
-	ViewPlane* h_vp = new ViewPlane;
-	World *h_wd = new World;
-	GeometricObject**h_obj = new GeometricObject*[4];
-	Light **h_l = new Light*[1];
-	Ambient *h_ab = new Ambient;
-	cudaMemcpy(h_wd,d_w,sizeof(World),cudaMemcpyDeviceToHost);
-	cudaMemcpy(h_vp,h_wd->vp,sizeof(ViewPlane),cudaMemcpyDeviceToHost);
-	cudaMemcpy(h_obj,h_wd->objects,4 * sizeof(GeometricObject*),cudaMemcpyDeviceToHost);
-	cudaMemcpy(h_l,h_wd->lights,1 * sizeof(Light*),cudaMemcpyDeviceToHost);
-	cudaMemcpy(h_ab,h_wd->ambient, sizeof(Ambient),cudaMemcpyDeviceToHost);
-
-	Sphere *h_s1,*h_s2,*h_s3;
-	h_s1 = new Sphere;h_s2 = new Sphere;h_s3 = new Sphere;
-	cudaMemcpy(h_s1,h_obj[0],sizeof(Sphere),cudaMemcpyDeviceToHost);	
-	cudaMemcpy(h_s2,h_obj[1],sizeof(Sphere),cudaMemcpyDeviceToHost);	
-	cudaMemcpy(h_s3,h_obj[2],sizeof(Sphere),cudaMemcpyDeviceToHost);
-
-	Plane *h_p = new Plane;
-	cudaMemcpy(h_p,h_obj[3],sizeof(Plane),cudaMemcpyDeviceToHost);
-
-	PointLight *h_pl = new PointLight;
-	cudaMemcpy(h_pl,h_l[0],sizeof(PointLight),cudaMemcpyDeviceToHost);
 
 	glutMainLoop();
 
