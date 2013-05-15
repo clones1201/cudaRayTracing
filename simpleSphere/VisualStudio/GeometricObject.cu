@@ -23,6 +23,7 @@ bool SphereHit(
 			if( t > kEpsilon ){
 				*tmin = t;
 				sr->normal = ( temp + t * ray.d ) / sphere->radius;
+				Normalize(sr->normal);
 				sr->localHitPoint = ray.o + t * ray.d;
 				return true;
 			}
@@ -32,6 +33,7 @@ bool SphereHit(
 			if( t > kEpsilon ){
 				*tmin = t;
 				sr->normal = ( temp + t * ray.d ) / sphere->radius;
+				Normalize(sr->normal);
 				sr->localHitPoint = ray.o + t * ray.d;
 				return true;
 			}
@@ -46,6 +48,7 @@ bool PlaneHit(Plane *plane, Ray ray, float *tmin, ShadeRec *sr){
 	if( t > kEpsilon ){
 		*tmin = t;
 		sr->normal = plane->normal;
+		Normalize(sr->normal);
 		sr->localHitPoint = ray.o + t * ray.d;
 
 		return true;
@@ -133,28 +136,7 @@ void initPlane(Plane **pl, Point3D p,Normal n,Material *m){
 	(*pl)->color = ((Matte*)m)->diffuseBRDF.cd;
 	(*pl)->material = m;
 	(*pl)->type = GMO_TYPE_PLANE;
-	/*Material *d_m;
-	switch(m->type){
-	case MATERIAL_TYPE_MATTE:
-		cudaMalloc(&d_m,sizeof(Matte));
-		cudaMemcpy(d_m,m,sizeof(Matte),cudaMemcpyHostToDevice);
-		break;
-	case MATERIAL_TYPE_PHONG:
-		cudaMalloc(&d_m,sizeof(Phong));
-		cudaMemcpy(d_m,m,sizeof(Phong),cudaMemcpyHostToDevice);
-		break;
-	default:
-		break;
-	}
-	plane.material = d_m;
 
-	plane.type = GMO_TYPE_PLANE;
-
-	cudaMalloc(pl,sizeof(Plane));
-	cudaCheckErrors("plane memory allocate failed");
-
-	cudaMemcpy((void*)*pl,&plane,sizeof(Plane),cudaMemcpyHostToDevice);
-	cudaCheckErrors("plane memory copy failed");*/
 }
 
 __host__
@@ -165,28 +147,6 @@ void initSphere(Sphere **s, Point3D c, float r,Material* m){
 	(*s)->radius = r;
 	(*s)->material = m;
 	(*s)->type = GMO_TYPE_SPHERE;
-	
-	/*
-	Material *d_m;
-	switch(m->type){
-	case MATERIAL_TYPE_MATTE:
-		cudaMalloc(&d_m,sizeof(Matte));
-		cudaMemcpy(d_m,m,sizeof(Matte),cudaMemcpyHostToDevice);
-		break;
-	case MATERIAL_TYPE_PHONG:
-		cudaMalloc(&d_m,sizeof(Phong));
-		cudaMemcpy(d_m,m,sizeof(Phong),cudaMemcpyHostToDevice);
-		break;
-	default:
-		break;
-	}
-	sphere.material = d_m;
-
-	cudaMalloc(s,sizeof(Sphere));
-	cudaCheckErrors("sphere memory allocate failed");
-
-	cudaMemcpy((void*)*s,&sphere,sizeof(Sphere),cudaMemcpyHostToDevice);
-	cudaCheckErrors("sphere memory copy failed");*/
 }
 
 __host__

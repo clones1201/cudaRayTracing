@@ -27,12 +27,10 @@ void PinholeRenderScene_k(World *w, uchar3 *buffer){
 	
 	int offset = r * gridDim.x * blockDim.x + c;
 
-	int numSample = getSampleNum(  vp.sampleScale  );
-
 	RGBColor pixelColor = black;
 	buffer[offset] = make_uchar3(0,0,0);
-	for(int i = 0 ; i < numSample ; ++ i ){
-			sp = getSampleUnitSquare( vp.samplerType , i , vp.sampleScale );
+	for(int i = 0 ; i < vp.sampler->numSamples ; ++ i ){
+		sp = getSampleUnitSquare( vp.sampler );
 
 			//pp.x = w->vp->s * ( c - 0.5 * w->vp->hres + sp.x );
 			//pp.y = w->vp->s * ( r - 0.5 * w->vp->vres + sp.y );
@@ -40,11 +38,15 @@ void PinholeRenderScene_k(World *w, uchar3 *buffer){
 			pp.y = vp.s * ( r - 0.5 * vp.vres + sp.y );
 
 			ray.d = RayDirection(&pinhole,pp);
-
-			pixelColor = pixelColor + RayCastTraceRay(w,ray,0) / numSample;
+			
+			//pixelColor = pixelColor + RayCastTraceRay(w,ray,0) / vp.sampler->numSamples;
+			//pixelColor = pixelColor + PathTraceRay(w,ray,5) / vp.sampler->numSamples;
+			pixelColor = pixelColor + WhittedRayTrace(w,ray,4) / vp.sampler->numSamples;
 			//singleSphereTraceRay(w,(Sphere*)*(w->object),ray,&pixelColor);
 			//pixelColor =multiObjTraceRay(w,ray);
-		}
+	}
+
+
 	buffer[offset] = MapToUchar(pixelColor);
 
 }
@@ -102,7 +104,7 @@ void RenderScene(World *w,int width,int height,uchar3 *buffer){
 	cudaMemcpy(&h_world, w,sizeof(World),cudaMemcpyDeviceToHost);
 	cudaCheckErrors("world copy failed");
 
-	Camara h_camara,*pointer;
+	Camara h_camara;
 	cudaMemcpy( &h_camara,h_world.camara,sizeof(Camara),cudaMemcpyDeviceToHost);
 	cudaCheckErrors("camara copy failed");
 

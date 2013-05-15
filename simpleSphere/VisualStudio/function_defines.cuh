@@ -14,6 +14,9 @@ RGBColor multiObjTraceRay(World *w, Ray ray);
 extern __device__
 RGBColor RayCastTraceRay(World *w, Ray ray ,int depth);
 
+extern __device__
+RGBColor PathTraceRay(World *w, Ray ray, int depth);
+
 /* Geometric Object function */
 extern __device__
 bool Hit(GeometricObject *obj,Ray ray , float *tmin, ShadeRec *sr);
@@ -36,7 +39,10 @@ void freeSphere(Sphere **s);
 /* Sampler function */
 
 extern __device__ inline
-Point2D	getSampleUnitSquare(SamplerType type, int idx,SampleScale scale);
+Point2D	getSampleUnitSquare(Sampler *sampler);
+
+extern __device__ inline
+Point3D getSampleUnitHemiSphere(Sampler *sampler,float exp);
 
 extern __device__ __host__ inline
 int getSampleNum(SampleScale scale);
@@ -69,7 +75,7 @@ extern __device__
 RGBColor F(BRDF *brdf, ShadeRec *sr, Vector3D *wi, Vector3D *wo);
 
 extern __device__
-RGBColor SampleF(BRDF *brdf, ShadeRec *sr, Vector3D *wi, Vector3D *wo);
+RGBColor SampleF(BRDF *brdf, ShadeRec *sr, Vector3D *wi, Vector3D *wo, float *exp);
 
 extern __device__
 RGBColor Rho(BRDF *brdf, ShadeRec *sr, Vector3D *wo);
@@ -102,7 +108,7 @@ Matte* newMatte(float ka,float kd,RGBColor cd){
 }
 
 __device__ __host__ inline
-Phong* newPhong( float ka, float kd, RGBColor cd , float ks, int exp ){
+Phong* newPhong( float ka, float kd, RGBColor cd, RGBColor cs , float ks, int exp ){
 	Phong *result = (Phong*)malloc(sizeof(Phong));
 	
 	result->ambientBRDF.type = BRDF_TYPE_LAMBERTIAN;
@@ -115,13 +121,41 @@ Phong* newPhong( float ka, float kd, RGBColor cd , float ks, int exp ){
 	result->diffuseBRDF.cd = cd;
 	result->specularBRDF.ks = ks;
 	result->specularBRDF.exp = exp;
+	result->specularBRDF.cs = cs;
 
 	result->type = MATERIAL_TYPE_PHONG;
 
 	return result;
 }
 
+__device__ __host__ inline
+Reflective* newReflective( float ka,float kd,RGBColor cd, RGBColor cs, float ks, int exp ,float kr,RGBColor cr){
+	Reflective *result = (Reflective*)malloc(sizeof(Reflective));
+	
+	result->ambientBRDF.type = BRDF_TYPE_LAMBERTIAN;
+	result->diffuseBRDF.type = BRDF_TYPE_LAMBERTIAN;
+	result->specularBRDF.type = BRDF_TYPE_GLOSSYSPECULAR;
+	result->reflectiveBRDF.type = BRDF_TYPE_PERFECTSPECULAR;
+
+	result->ambientBRDF.kd = ka;
+	result->diffuseBRDF.kd = kd;
+	result->ambientBRDF.cd = cd;
+	result->diffuseBRDF.cd = cd;
+	result->specularBRDF.ks = ks;
+	result->specularBRDF.exp = exp;
+	result->specularBRDF.cs = cs;
+	result->reflectiveBRDF.cr = cr;
+	result->reflectiveBRDF.kr = kr;
+
+	result->type = MATERIAL_TYPE_REFLECTIVE;
+
+	return result;
+};
+
 extern __device__
 RGBColor Shade(Material *m,ShadeRec *sr);
+
+extern __device__
+RGBColor PathShade(Material *m,ShadeRec *sr,Vector3D *wi);
 
 #endif

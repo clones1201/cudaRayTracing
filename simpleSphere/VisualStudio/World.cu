@@ -12,9 +12,15 @@ void UpdateWorldToDevice(World *h_w, World **d_w){
 
 	World *temp = (World*)malloc(sizeof(World));
 
+	ViewPlane h_vp = *(h_w->vp);
+	cudaMalloc(& h_vp.sampler ,sizeof( Sampler ));
+	cudaCheckErrors("sampler allocate failed");
+	cudaMemcpy( h_vp.sampler, h_w->vp->sampler, sizeof(Sampler) ,cudaMemcpyHostToDevice );
+	cudaCheckErrors("sampler copy failed");
+
 	cudaMalloc(&(temp->vp),sizeof(ViewPlane));
 	cudaCheckErrors("viewplane allocate failed");
-	cudaMemcpy((temp->vp),h_w->vp,sizeof(ViewPlane),cudaMemcpyHostToDevice);
+	cudaMemcpy((temp->vp),&h_vp,sizeof(ViewPlane),cudaMemcpyHostToDevice);
 	cudaCheckErrors("viewplane copy failed");
 
 	temp->backgroundColor = h_w->backgroundColor;
@@ -149,44 +155,60 @@ void BuildWorld(World **h_w, World **d_w, int width,int height){
 	(*h_w)->vp->hres = width;
 	(*h_w)->vp->vres = height;
 	(*h_w)->vp->s	 = 1;
-	(*h_w)->vp->samplerType = SAMPLER_JITTERED;
-	(*h_w)->vp->sampleScale = SAMPLE_SCALE_4;
+
+	(*h_w)->vp->sampler = (Sampler*)malloc( sizeof(Sampler));
+	(*h_w)->vp->sampler->count = 0;
+	(*h_w)->vp->sampler->numSamples = 4;
+	(*h_w)->vp->sampler->type = SAMPLER_JITTERED;
+	GenerateSample( (*h_w)->vp->sampler );
 
 	(*h_w)->backgroundColor = RGBColor(5,5,30);
 
 	/* GeometricObject
 	*/
-	(*h_w)->numObject = 5;
+	(*h_w)->numObject = 9;
 	(*h_w)->objects = (GeometricObject **)malloc((*h_w)->numObject * sizeof(GeometricObject*));
 
-	Matte *material1 = newMatte(0.25,0.65,red);	
-	Phong *material2 = newPhong(0.25,0.6,green,0.2,20);	
-	Phong *material3 = newPhong(0.25,0.6,yellow,0.2,20);	
-	Matte *material4 = newMatte(0.25,0.65,white);
-	Phong *material5 = newPhong(0.25,0.6,red,0.2,20);
-
-	initSphere( ((Sphere**)((*h_w)->objects)),		Point3D(0,120,280),	120,	(Material*)material5		);
-	initSphere( ((Sphere**)((*h_w)->objects+1)),	Point3D(0,150,0),	150,		(Material*)material2		);
-	initSphere( ((Sphere**)((*h_w)->objects+2)),	Point3D(210,100,100),	100,		(Material*)material3	);
-	initPlane( ((Plane**)((*h_w)->objects+3)),	Point3D(0,0,0),	Normal(0,1,0),		(Material*)material4		);
-	initPlane( ((Plane**)((*h_w)->objects+4)),	Point3D(-600,0,-600),	Normal(1,0,1),		(Material*)material4);
-
-/*	(*h_w)->numObject = 100;
+	Matte *RedMatte = newMatte(0.25,0.65,red);
+	Matte *GreenMatte = newMatte(0.25,0.65,green);
+	Matte *YellowMatte = newMatte(0.25,0.65,yellow);
+	Matte *BlueMatte = newMatte(0.25,0.65,blue);
+	Matte *WhiteMatte = newMatte(0.25,0.65,white);
+	Matte *GrayMatte = newMatte(0.25,0.65, RGBColor(0.8,0.8,0.8));
+	Phong *GreenPhong = newPhong(0.25,0.6,green,white,0.2,5);	
+	Phong *RedPhong = newPhong(0.25,0.6,red,white,0.2,5);	
+	Phong *YellowPhong = newPhong(0.25,0.6,yellow,white,0.2,5);
+	Phong *WhitePhong = newPhong(0.25,0.6,white,white,0.2,5);
+	Phong *GrayPhong = newPhong(0.25,0.6, RGBColor(0.8,0.8,0.8),white,0.2,20);
+	Phong *test = newPhong(0.25,0.6,blue,white,0,1);
+	Reflective *mirror = newReflective(0.25,0.5,RGBColor(1,1,1),RGBColor(1,1,1),0.15,100,0.75,white);
+	
+	initSphere( ((Sphere**)((*h_w)->objects)),		Point3D(0,200,0),	200,	(Material*)RedPhong		);
+	initSphere( ((Sphere**)((*h_w)->objects+1)),	Point3D(-220,120,250),	120,		(Material*)YellowPhong		);
+	initSphere( ((Sphere**)((*h_w)->objects+2)),	Point3D(200,60,80),	60,		(Material*)GreenPhong	);
+	initPlane( ((Plane**)((*h_w)->objects+3)),	Point3D(0,0,0),	Normal(0,1,0),		(Material*)WhiteMatte		);
+	initPlane( ((Plane**)((*h_w)->objects+4)),	Point3D(-500,0,0),	Normal(1,0,0),		(Material*)RedMatte		);
+	initPlane( ((Plane**)((*h_w)->objects+5)),	Point3D(500,0,0),	Normal(-1,0,0),		(Material*)mirror  );
+	initPlane( ((Plane**)((*h_w)->objects+6)),	Point3D(0,0,-500),	Normal(0,0,1),		(Material*)mirror	);
+	initPlane( ((Plane**)((*h_w)->objects+7)),	Point3D(0,1000,0),	Normal(0,-1,0),		(Material*)WhiteMatte	);
+	initPlane( ((Plane**)((*h_w)->objects+8)),	Point3D(0,0,1000),	Normal(0,0,-1),		(Material*)WhiteMatte	);
+	/*(*h_w)->numObject = 100;
 	(*h_w)->objects = (GeometricObject **)malloc((*h_w)->numObject * sizeof(GeometricObject*));
 	Matte *material = newMatte(0.25,0.65,red);
-	Matte *material4 = newMatte(0.25,0.65,RGBColor(5,5,40));
+	Matte *material4 = newMatte(0.1,0.2,RGBColor(5,5,20));
+	Phong *material5 = newPhong(0.25,0.6,red,0.2,20);
 
 	initPlane(  ((Plane**)((*h_w)->objects )),	Point3D(-600,0,-600),	Normal(1,0,1),		(Material*)material4		);
 	for( int i = 1 ; i < (*h_w)->numObject ; ++ i ){
 		initSphere( ((Sphere**)((*h_w)->objects + i )), 
 			Point3D( 400 * float(rand())/float(RAND_MAX) , 400 * float(rand())/float(RAND_MAX) , 400 * float(rand())/float(RAND_MAX) ),
-			35 * float(rand())/float(RAND_MAX) + 5 , (Material*)material); 
+			35 * float(rand())/float(RAND_MAX) + 5 , (Material*)material5); 
 	}*/
 	
 	Pinhole *pinhole = (Pinhole*)malloc(sizeof(Pinhole));
 	pinhole->type = CAMARA_TYPE_PINHOLE;
-	pinhole->eye = Point3D(500,300,300);
-	pinhole->lookat = Point3D(0,100,100);
+	pinhole->eye = Point3D(-350,600,900);
+	pinhole->lookat = Point3D(200,100,0);
 	pinhole->up = Vector3D(0,1,0);
 	pinhole->viewDistance = 400;
 	pinhole->zoom = 1;
@@ -196,7 +218,7 @@ void BuildWorld(World **h_w, World **d_w, int width,int height){
 	/* Light
 	*/
 	Ambient *h_ab = (Ambient*)malloc(sizeof(Ambient));
-	h_ab->ls = 0.5;
+	h_ab->ls = 0.2;
 	h_ab->color = white;
 	h_ab->shadows = false;
 	h_ab->type = LIGHT_TYPE_AMBIENT;
@@ -207,12 +229,20 @@ void BuildWorld(World **h_w, World **d_w, int width,int height){
 	(*h_w)->lights = (Light**)malloc( (*h_w)->numLight * sizeof(Light*) );
 	
 	PointLight *h_pl = (PointLight*)malloc(sizeof(PointLight));
-	h_pl->ls = 1;
-	h_pl->pos = Point3D(1000,400,1200);
+	h_pl->ls = 1.1;
+	h_pl->pos = Point3D(0,700,450);
 	h_pl->color = white;
 	h_pl->shadows = true;
 	h_pl->type = LIGHT_TYPE_POINTLIGHT;
 	(*h_w)->lights[0] = (Light*)h_pl;
+/*
+	AmbientOccluder *h_ao = (AmbientOccluder*)malloc(sizeof(AmbientOccluder));
+	h_ao->ls = 1;
+	h_ao->color = white;
+	h_ao->shadows = true;
+	h_ao->type = LIGHT_TYPE_AMBIENTOCCLUDER;
+	(*h_w)->lights[0] = (Light*)h_ao;
+	*/
 	
 	UpdateWorldToDevice(*h_w,d_w);
 }

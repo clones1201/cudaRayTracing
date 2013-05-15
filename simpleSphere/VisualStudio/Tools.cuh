@@ -17,6 +17,7 @@ typedef float3		RGBColor;
 #define Point3D(x,y,z)		make_float3(x,y,z)
 #define Normal(x,y,z)		make_float3(x,y,z)
 #define RGBColor(r,g,b)		make_float3(r,g,b)
+#define Point2D(x,y)		make_float2(x,y)
 
 #define white	make_float3(1.0,1.0,1.0)
 #define black	make_float3(0,0,0)

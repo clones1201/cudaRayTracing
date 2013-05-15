@@ -3,129 +3,121 @@
 #include "function_defines.cuh"
 
 
-__device__ inline void sampler_PureRandom	( Point2D *p, int Idx, int num );
-__device__ inline void sampler_Regular		( Point2D *p, int Idx, int num );
-__device__ inline void sampler_Jittered		( Point2D *p, int Idx, int num );
-__device__ inline void sampler_Nrooks		( Point2D *p, int Idx, int num );
-__device__ inline void sampler_MultiJittered( Point2D *p, int Idx, int num );
-__device__ inline void sampler_Hammersley	( Point2D *p, int Idx, int num );
+__host__ inline void sampler_PureRandom	( Sampler *sampler );
+__host__ inline void sampler_Regular		( Sampler *sampler );
+__host__ inline void sampler_Jittered		( Sampler *sampler );
+__host__ inline void sampler_Nrooks		( Sampler *sampler );
+__host__ inline void sampler_MultiJittered( Sampler *sampler );
+__host__ inline void sampler_Hammersley	( Sampler *sampler );
 
-__device__ inline
-Point2D getSampleUnitSquare(SamplerType type, int Idx, SampleScale scale){
-	Point2D result;
-	int num = getSampleNum(scale);
-	switch( type ){
+__host__ inline
+void GenerateSample(Sampler *sampler){
+	switch( sampler->type ){
 	case SAMPLER_PURERANDOM :
-		sampler_PureRandom(&result,Idx,num);
+		sampler_PureRandom(sampler);
 		break;
 	case SAMPLER_REGULAR :
-		sampler_Regular(&result,Idx,num);
+		sampler_Regular(sampler);
 		break;
 	case SAMPLER_JITTERED :
-		sampler_Jittered(&result,Idx,num);
+		sampler_Jittered(sampler);
 		break;
 	case SAMPLER_NROOKS :
-		sampler_Nrooks(&result,Idx,num);
+		sampler_Nrooks(sampler);
 		break;
 	case SAMPLER_MULTIJITTERED :
-		sampler_MultiJittered(&result,Idx,num);
+		sampler_MultiJittered(sampler);
 		break;
 	case SAMPLER_HAMMERSLEY :
-		sampler_Hammersley(&result,Idx,num);
+		sampler_Hammersley(sampler);
 		break;
 	default:
-		result = make_float2(0,0);
 		break;
 	}
-	return result;
 }
 
 __device__ inline
-void sampler_PureRandom		( Point2D *p, int Idx, int num ){
-	/*not yet..*/
-	p->x = 0;
-	p->y = 0;
+Point2D getSampleUnitSquare(Sampler *sampler){
+	return sampler->sample[ sampler->count++ % SAMPLE_POOL_SIZE ];
 }
 
-__device__ inline 
-void sampler_Regular		( Point2D *p,int Idx, int num ){
+__host__ inline
+void sampler_PureRandom		( Sampler *sampler  ){
 	/*not yet..*/
-	p->x = 0;
-	p->y = 0;
+	for( int i = 0 ; i < sampler->numSamples ; i ++ ){
+		sampler->sample[i].x = 0;
+		sampler->sample[i].y = 0;
+	}
 }
 
-__device__ inline 
-void sampler_Jittered		( Point2D *p, int Idx, int num ){
-	SampleScale scale = getSampleScale(num);
-	int dim = sqrtf( float(num) );
+__host__ inline 
+void sampler_Regular		( Sampler *sampler  ){
+	/*not yet..*/
+	for( int i = 0 ; i < sampler->numSamples ; i ++ ){
+		sampler->sample[i].x = 0;
+		sampler->sample[i].y = 0;
+	}
+}
 
-	int r = Idx / dim;
-	int c = Idx % dim;
+__host__ inline 
+void sampler_Jittered		( Sampler *sampler  ){
 
-	float t = 1 / dim;
+	for(int j = 0 ; j < SAMPLE_POOL_SIZE / sampler->numSamples ; j ++){
+		for( int i = 0 ; i < sampler->numSamples ; i ++ ){
 
-	p->x = float( c * t ) + floatRand()/dim;
-	p->y = float( r * t ) + floatRand()/dim;
+			int dim = sqrtf( float(sampler->numSamples ) );
 
+			int r = i / dim;
+			int c = i % dim;
+	
+			float t = 1 / dim;
+
+			sampler->sample[j * sampler->numSamples + i].x = float( c * t ) + floatRand()/dim;
+			sampler->sample[j * sampler->numSamples + i].y = float( r * t ) + floatRand()/dim;
+		}
+	}
+}
+
+__host__ inline
+void sampler_Nrooks			( Sampler *sampler  ){
+	/*not yet..*/
+	for( int i = 0 ; i < sampler->numSamples ; i ++ ){
+		sampler->sample[i].x = 0;
+		sampler->sample[i].y = 0;
+	}
+}
+
+__host__ inline 
+void sampler_MultiJittered	( Sampler *sampler ){
+	/*not yet..*/
+	for( int i = 0 ; i < sampler->numSamples ; i ++ ){
+		sampler->sample[i].x = 0;
+		sampler->sample[i].y = 0;
+	}
+}
+
+__host__ inline 
+void sampler_Hammersley		( Sampler *sampler ){
+	/*not yet..*/
+	for( int i = 0 ; i < sampler->numSamples ; i ++ ){
+		sampler->sample[i].x = 0;
+		sampler->sample[i].y = 0;
+	}
 }
 
 __device__ inline
-void sampler_Nrooks			( Point2D *p,int Idx, int num ){
-	/*not yet..*/
-	p->x = 0;
-	p->y = 0;
+Point3D MapSquareToHemiSphere(Point2D point, float exp){
+	float cosPhi = cosf( point.x * 2.0 * PI );
+	float sinPhi = sinf( point.x * 2.0 * PI );
+	float cosTheta = powf( (1.0 - point.y ), 1.0 / ( exp + 1 ));
+	float sinTheta = sqrtf( 1.0 - cosTheta * cosTheta );
+	float pu = sinTheta * cosTheta;
+	float pv = sinTheta * sinTheta;
+	float pw = cosTheta;
+	return  Point3D( pu , pv, pw );
 }
 
-__device__ inline 
-void sampler_MultiJittered	( Point2D *p,int Idx, int num ){
-	/*not yet..*/
-	p->x = 0;
-	p->y = 0;
-}
-
-__device__ inline 
-void sampler_Hammersley		( Point2D *p,int Idx, int num ){
-	/*not yet..*/
-	p->x = 0;
-	p->y = 0;
-}
-
-__device__ __host__ inline
-int getSampleNum(SampleScale scale){
-	switch(scale){
-	case SAMPLE_SCALE_1:
-		return 1;
-	case SAMPLE_SCALE_4:
-		return 4;
-	case SAMPLE_SCALE_16:
-		return 16;
-	case SAMPLE_SCALE_64:
-		return 64;
-	case SAMPLE_SCALE_256:
-		return 256;
-	default:
-		return 1;
-	}
-}
-
-__device__ __host__ inline
-SampleScale getSampleScale(int num){
-	if( num <= 1 ){
-		return SAMPLE_SCALE_1;
-	}
-	else if( num > 1 && num <= 4 ){
-		return SAMPLE_SCALE_4;
-	}
-	else if( num > 4 && num <= 16){
-		return SAMPLE_SCALE_16;
-	}
-	else if( num > 16 && num <= 64){
-		return SAMPLE_SCALE_64;
-	}
-	else if( num > 64 && num <= 256 ){
-		return SAMPLE_SCALE_256;
-	}
-	else{
-		return SAMPLE_SCALE_1;
-	}
+__device__ inline
+Point3D getSampleUnitHemiSphere(Sampler *sampler, float exp){
+	return MapSquareToHemiSphere( sampler->sample[ sampler->count++ % SAMPLE_POOL_SIZE ],exp );
 }
