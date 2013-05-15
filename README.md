@@ -9,4 +9,13 @@ developing with NVIDIA GPU Computeing Toolkit 5.0,freeglut2.80, Glew1.9, and Vis
 
 platform : Windows 8 pro, NVIDIA GTX260
 
-![3 sphere, pinhole camara，Phong](https://lh6.googleusercontent.com/-ewQZtsKKGIA/UXQKeL4ok3I/AAAAAAAAAHM/sH24u5MpLrI/s503/Phong%E6%9D%90%E8%B4%A8%EF%BC%8C3%E4%B8%AA%E7%90%83%E4%BD%93%EF%BC%8C%E4%BF%AE%E6%AD%A3%E4%BA%86%E9%A2%9C%E8%89%B2%E8%AE%A1%E7%AE%97%E7%9A%84%E9%94%99%E8%AF%AF.jpg)
+below is some rendered sample.
+
+
+two mirror and three sphere in a box.
+basically correct, but got some weird color on surface.
+![3 sphere, pinhole camara，Phong](https://lh5.googleusercontent.com/-MTRpx-e-xLM/UZOTejUOe8I/AAAAAAAAAJI/_ZXMLUlaMzw/w528-h551-no/2%25E9%259D%25A2%25E9%2595%259C%25E5%25AD%2590.jpg)
+
+same scene with more reflect...hardly correct
+
+![3 sphere, pinhole camara，Phong](https://lh3.googleusercontent.com/-yMqZfrld-pA/UZOTfdpJPKI/AAAAAAAAAJQ/cK4pnmuwXLg/w528-h551-no/QQ%25E6%2588%25AA%25E5%259B%25BE20130515200113.jpg)
