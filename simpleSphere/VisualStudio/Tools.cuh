@@ -69,4 +69,6 @@ unsigned int uintRand();
 extern __device__ __host__ inline
 float floatRand();
 
+#define STACK_MAX	10
+
 #endif

@@ -41,7 +41,7 @@ void PinholeRenderScene_k(World *w, uchar3 *buffer){
 			
 			//pixelColor = pixelColor + RayCastTraceRay(w,ray,0) / vp.sampler->numSamples;
 			//pixelColor = pixelColor + PathTraceRay(w,ray,5) / vp.sampler->numSamples;
-			pixelColor = pixelColor + WhittedRayTrace(w,ray,4) / vp.sampler->numSamples;
+			pixelColor = pixelColor + WhittedRayTrace(w,ray,2) / vp.sampler->numSamples;
 			//singleSphereTraceRay(w,(Sphere*)*(w->object),ray,&pixelColor);
 			//pixelColor =multiObjTraceRay(w,ray);
 	}

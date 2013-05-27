@@ -158,4 +158,27 @@ RGBColor Shade(Material *m,ShadeRec *sr);
 extern __device__
 RGBColor PathShade(Material *m,ShadeRec *sr,Vector3D *wi);
 
+/* KD Tree function
+*/
+
+__host__ /* build new box to overlay the object */
+BBox Bounds(GeometricObject *object);
+
+__host__
+float SurfaceArea(BBox box);
+
+__host__
+int MaximumExtent( BBox box);
+
+__host__ /* Union , modify a box to overlay a point */
+BBox Union(BBox box, Point3D p);
+__host__ /* Union , modify a box to overlay another box */
+BBox Union(BBox box1, BBox box2);
+
+__device__
+bool HitBox(BBox box,Ray ray, float tmin, float tmax);
+
+__host__
+KDNode* BuildKDTree(GeometricObject **objects, int numObjects);
+
 #endif

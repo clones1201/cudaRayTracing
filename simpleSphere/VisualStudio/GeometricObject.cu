@@ -128,24 +128,24 @@ bool ShadowHit(GeometricObject *obj, Ray ray, float *tmin){
 }
 
 __host__
-void initPlane(Plane **pl, Point3D p,Normal n,Material *m){
+void initPlane(Plane **pl, Point3D p,Normal n,int mIdx){
 	
 	(*pl) = (Plane*)malloc(sizeof(Plane));
 	(*pl)->normal = n;
 	(*pl)->point = p;
-	(*pl)->color = ((Matte*)m)->diffuseBRDF.cd;
-	(*pl)->material = m;
+//	(*pl)->color = ((Matte*)m)->diffuseBRDF.cd;
+	(*pl)->materialIdx = mIdx;
 	(*pl)->type = GMO_TYPE_PLANE;
 
 }
 
 __host__
-void initSphere(Sphere **s, Point3D c, float r,Material* m){
+void initSphere(Sphere **s, Point3D c, float r,int mIdx){
 	(*s) = (Sphere*)malloc(sizeof(Sphere));
 	(*s)->center = c;
-	(*s)->color = ((Matte*)m)->diffuseBRDF.cd;
+//	(*s)->color = ((Matte*)m)->diffuseBRDF.cd;
 	(*s)->radius = r;
-	(*s)->material = m;
+	(*s)->materialIdx = mIdx;
 	(*s)->type = GMO_TYPE_SPHERE;
 }
 

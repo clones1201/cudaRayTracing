@@ -25,8 +25,39 @@ void UpdateWorldToDevice(World *h_w, World **d_w){
 
 	temp->backgroundColor = h_w->backgroundColor;
 
+	/* Material table
+	*/
+	temp->numMaterial = h_w->numMaterial;
+	temp->materials = (Material**)malloc( temp->numMaterial * sizeof( Material* )); 
+	for( int i = 0 ; i < h_w->numMaterial ; i ++ ){
+
+		int sizeOfMaterial;
+		switch( h_w->materials[i]->type ){
+		case MATERIAL_TYPE_MATTE:
+			sizeOfMaterial = sizeof(Matte);
+			break;
+		case MATERIAL_TYPE_PHONG:
+			sizeOfMaterial = sizeof(Phong);
+			break;
+		default:
+			sizeOfMaterial = sizeof(Material);
+			break;
+		}
+		cudaMalloc(temp->materials + i,sizeOfMaterial);
+		cudaCheckErrors("material allocate failed");
+		cudaMemcpy(temp->materials[i],h_w->materials[i],sizeOfMaterial,cudaMemcpyHostToDevice);
+		cudaCheckErrors("material copy failed");		
+	}
+	Material **d_ms;
+	cudaMalloc(&d_ms,temp->numMaterial * sizeof( Material*));
+	cudaCheckErrors("material* allocate failed ");
+	cudaMemcpy(d_ms,temp->materials,temp->numMaterial * sizeof(Material*),cudaMemcpyHostToDevice);
+	cudaCheckErrors("mateiral* copy failed");
+	free( temp->materials );
+	temp->materials = d_ms;
+
 	/*  GeometricObject                   
-	/*  struct GeometricObject has 2 types, sphere and plane, contains a pointer to material  
+	/*  struct GeometricObject has 2 types, sphere and plane, contains a index to material table 
 	/*  if any change, this comment should be updated;
 	*/
 	temp->numObject = h_w->numObject;
@@ -45,35 +76,10 @@ void UpdateWorldToDevice(World *h_w, World **d_w){
 			sizeOfObject = sizeof(GeometricObject);
 			break;
 		}
-		GeometricObject *h_gmo = (GeometricObject*)malloc(sizeOfObject);
-		memcpy(h_gmo,h_w->objects[i],sizeOfObject);
-
-		int sizeOfMaterial;
-		switch( h_w->objects[i]->material->type ){
-		case MATERIAL_TYPE_MATTE:
-			sizeOfMaterial = sizeof(Matte);
-			break;
-		case MATERIAL_TYPE_PHONG:
-			sizeOfMaterial = sizeof(Phong);
-			break;
-		default:
-			sizeOfMaterial = sizeof(Material);
-			break;
-		}
-		Material *d_m;
-		cudaMalloc(&d_m,sizeOfMaterial);
-		cudaCheckErrors("material allocate failed");
-		cudaMemcpy(d_m,h_w->objects[i]->material,sizeOfMaterial,cudaMemcpyHostToDevice);
-		cudaCheckErrors("material copy failed");
-
-		h_gmo->material = d_m;
-
 		cudaMalloc(temp->objects + i,sizeOfObject);
 		cudaCheckErrors("geometricobjects allocate failed");
-		cudaMemcpy(temp->objects[i],h_gmo,sizeOfObject,cudaMemcpyHostToDevice);
+		cudaMemcpy(temp->objects[i],h_w->objects[i],sizeOfObject,cudaMemcpyHostToDevice);
 		cudaCheckErrors("geometricobjects copy failed");
-
-		free(h_gmo);
 	}
 	GeometricObject **d_obj;
 	cudaMalloc(&d_obj,temp->numObject * sizeof(GeometricObject*));
@@ -166,45 +172,63 @@ void BuildWorld(World **h_w, World **d_w, int width,int height){
 
 	/* GeometricObject
 	*/
+	/*
 	(*h_w)->numObject = 9;
 	(*h_w)->objects = (GeometricObject **)malloc((*h_w)->numObject * sizeof(GeometricObject*));
 
-	Matte *RedMatte = newMatte(0.25,0.65,red);
-	Matte *GreenMatte = newMatte(0.25,0.65,green);
-	Matte *YellowMatte = newMatte(0.25,0.65,yellow);
-	Matte *BlueMatte = newMatte(0.25,0.65,blue);
-	Matte *WhiteMatte = newMatte(0.25,0.65,white);
-	Matte *GrayMatte = newMatte(0.25,0.65, RGBColor(0.8,0.8,0.8));
-	Phong *GreenPhong = newPhong(0.25,0.6,green,white,0.2,5);	
-	Phong *RedPhong = newPhong(0.25,0.6,red,white,0.2,5);	
-	Phong *YellowPhong = newPhong(0.25,0.6,yellow,white,0.2,5);
-	Phong *WhitePhong = newPhong(0.25,0.6,white,white,0.2,5);
-	Phong *GrayPhong = newPhong(0.25,0.6, RGBColor(0.8,0.8,0.8),white,0.2,20);
-	Phong *test = newPhong(0.25,0.6,blue,white,0,1);
-	Reflective *mirror = newReflective(0.25,0.5,RGBColor(1,1,1),RGBColor(1,1,1),0.15,100,0.75,white);
-	
-	initSphere( ((Sphere**)((*h_w)->objects)),		Point3D(0,200,0),	200,	(Material*)RedPhong		);
-	initSphere( ((Sphere**)((*h_w)->objects+1)),	Point3D(-220,120,250),	120,		(Material*)YellowPhong		);
-	initSphere( ((Sphere**)((*h_w)->objects+2)),	Point3D(200,60,80),	60,		(Material*)GreenPhong	);
-	initPlane( ((Plane**)((*h_w)->objects+3)),	Point3D(0,0,0),	Normal(0,1,0),		(Material*)WhiteMatte		);
-	initPlane( ((Plane**)((*h_w)->objects+4)),	Point3D(-500,0,0),	Normal(1,0,0),		(Material*)RedMatte		);
-	initPlane( ((Plane**)((*h_w)->objects+5)),	Point3D(500,0,0),	Normal(-1,0,0),		(Material*)mirror  );
-	initPlane( ((Plane**)((*h_w)->objects+6)),	Point3D(0,0,-500),	Normal(0,0,1),		(Material*)mirror	);
-	initPlane( ((Plane**)((*h_w)->objects+7)),	Point3D(0,1000,0),	Normal(0,-1,0),		(Material*)WhiteMatte	);
-	initPlane( ((Plane**)((*h_w)->objects+8)),	Point3D(0,0,1000),	Normal(0,0,-1),		(Material*)WhiteMatte	);
-	/*(*h_w)->numObject = 100;
-	(*h_w)->objects = (GeometricObject **)malloc((*h_w)->numObject * sizeof(GeometricObject*));
-	Matte *material = newMatte(0.25,0.65,red);
-	Matte *material4 = newMatte(0.1,0.2,RGBColor(5,5,20));
-	Phong *material5 = newPhong(0.25,0.6,red,0.2,20);
+	(*h_w)->numMaterial = 13;
+	(*h_w)->materials = (Material**)malloc((*h_w)->numMaterial * sizeof(Material*));
 
-	initPlane(  ((Plane**)((*h_w)->objects )),	Point3D(-600,0,-600),	Normal(1,0,1),		(Material*)material4		);
-	for( int i = 1 ; i < (*h_w)->numObject ; ++ i ){
-		initSphere( ((Sphere**)((*h_w)->objects + i )), 
-			Point3D( 400 * float(rand())/float(RAND_MAX) , 400 * float(rand())/float(RAND_MAX) , 400 * float(rand())/float(RAND_MAX) ),
-			35 * float(rand())/float(RAND_MAX) + 5 , (Material*)material5); 
-	}*/
+	(*h_w)->materials[0] = (Material*)newMatte(0.25,0.65,red);   //Red Matte
+	(*h_w)->materials[1] = (Material*)newMatte(0.25,0.65,green); //Green Matte
+	(*h_w)->materials[2] = (Material*)newMatte(0.25,0.65,yellow);//Yellow Matte
+	(*h_w)->materials[3] = (Material*)newMatte(0.25,0.65,blue);//Blue Matte
+	(*h_w)->materials[4] = (Material*)newMatte(0.25,0.65,white);//White Matte
+	(*h_w)->materials[5] = (Material*)newMatte(0.25,0.65, RGBColor(0.8,0.8,0.8)); //Gray Matte
+	(*h_w)->materials[6] = (Material*)newPhong(0.25,0.6,green,white,0.2,5);	//Green Phong
+	(*h_w)->materials[7] = (Material*)newPhong(0.25,0.6,red,white,0.2,5);	//Red Phong
+	(*h_w)->materials[8] = (Material*)newPhong(0.25,0.6,yellow,white,0.2,5);//Yellow Phong
+	(*h_w)->materials[9] = (Material*)newPhong(0.25,0.6,white,white,0.2,5);//White Phong
+	(*h_w)->materials[10] = (Material*)newPhong(0.25,0.6, RGBColor(0.8,0.8,0.8),white,0.2,20); // Gray Phong
+	(*h_w)->materials[11] = (Material*)newPhong(0.25,0.6,blue,white,0,1);//Blue Phong
+	(*h_w)->materials[12] = (Material*)newReflective(0.25,0.5,RGBColor(1,1,1),RGBColor(1,1,1),0.15,100,0.75,white); //Mirror
 	
+	initSphere( ((Sphere**)((*h_w)->objects)),		Point3D(0,200,0),	200,			7	);
+	initSphere( ((Sphere**)((*h_w)->objects+1)),	Point3D(-220,120,250),	120,		8	);
+	initSphere( ((Sphere**)((*h_w)->objects+2)),	Point3D(200,60,80),	60,				6	);
+	initPlane( ((Plane**)((*h_w)->objects+3)),	Point3D(0,0,0),	Normal(0,1,0),			4	);
+	initPlane( ((Plane**)((*h_w)->objects+4)),	Point3D(-500,0,0),	Normal(1,0,0),		0	);
+	initPlane( ((Plane**)((*h_w)->objects+5)),	Point3D(500,0,0),	Normal(-1,0,0),		12  );
+	initPlane( ((Plane**)((*h_w)->objects+6)),	Point3D(0,0,-500),	Normal(0,0,1),		12	);
+	initPlane( ((Plane**)((*h_w)->objects+7)),	Point3D(0,1000,0),	Normal(0,-1,0),		4	);
+	initPlane( ((Plane**)((*h_w)->objects+8)),	Point3D(0,0,1000),	Normal(0,0,-1),		4	);
+	*/
+	
+	(*h_w)->numObject = 101;
+	(*h_w)->objects = (GeometricObject **)malloc((*h_w)->numObject * sizeof(GeometricObject*));
+
+	(*h_w)->numMaterial = 3;
+	(*h_w)->materials = (Material**)malloc((*h_w)->numMaterial * sizeof(Material*));
+
+	(*h_w)->materials[0] = (Material*)newMatte(0.25,0.65,red);   //Red Matte
+	(*h_w)->materials[1] = (Material*)newMatte(0.25,0.65, RGBColor(0.8,0.8,0.8));
+	(*h_w)->materials[2] = (Material*)newPhong(0.25,0.6,red,white,0.2,5);	
+
+	initPlane(  ((Plane**)((*h_w)->objects  )),	Point3D(0,0,-600),	Normal(0,0,1),		1);
+	for( int i = 1 ; i < (*h_w)->numObject ; ++ i ){
+		float x,y,z,r;
+		x = 800 * float(rand())/float(RAND_MAX) - 200 ;
+		y = 800 * float(rand())/float(RAND_MAX) - 200 ;
+		z = 400 * float(rand())/float(RAND_MAX) - 100 ;
+		r = 50 * float(rand())/float(RAND_MAX) + 25;
+		initSphere( ((Sphere**)((*h_w)->objects + i )),	Point3D(x,y,z) ,r , 2); 
+	}
+	//initSphere( ((Sphere**)((*h_w)->objects+0)),	Point3D(60,0,80),	60,				0	);
+	//initSphere( ((Sphere**)((*h_w)->objects+1)),	Point3D(-60,0,80),	60,				1	);
+	//initSphere( ((Sphere**)((*h_w)->objects+2)),	Point3D(0,104,80),	60,				2	);
+	
+	(*h_w)->kdTree = BuildTree((*h_w)->objects + 1,(*h_w)->numObject - 1);
+
 	Pinhole *pinhole = (Pinhole*)malloc(sizeof(Pinhole));
 	pinhole->type = CAMARA_TYPE_PINHOLE;
 	pinhole->eye = Point3D(-350,600,900);
@@ -280,7 +304,7 @@ void HitObject(World *w, Ray ray, ShadeRec *sr ){
 		if( Hit( w->objects[i],ray,&t,sr) && (t < tmin )){
 			sr->hitAnObject = true;
 			tmin = t;
-			sr->material = w->objects[i]->material;
+			sr->material = w->materials[ w->objects[i]->materialIdx ];
 			sr->hitPoint = ray.o + t * ray.d;
 			normal = sr->normal;
 			localHitPoint = sr->localHitPoint;
