@@ -227,7 +227,7 @@ void BuildWorld(World **h_w, World **d_w, int width,int height){
 	//initSphere( ((Sphere**)((*h_w)->objects+1)),	Point3D(-60,0,80),	60,				1	);
 	//initSphere( ((Sphere**)((*h_w)->objects+2)),	Point3D(0,104,80),	60,				2	);
 	
-	(*h_w)->kdTree = BuildTree((*h_w)->objects + 1,(*h_w)->numObject - 1);
+	(*h_w)->kdTree = BuildKDTree((*h_w)->objects + 1,(*h_w)->numObject - 1);
 
 	Pinhole *pinhole = (Pinhole*)malloc(sizeof(Pinhole));
 	pinhole->type = CAMARA_TYPE_PINHOLE;

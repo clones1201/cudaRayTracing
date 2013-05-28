@@ -28,6 +28,20 @@ float SurfaceArea(BBox box){
 	return result;
 }
 
+__host__
+int MaximumExtent(BBox box){
+	float x = box.pMax.x - box.pMin.x;
+	float y = box.pMax.y - box.pMin.y;
+	float z = box.pMax.z - box.pMin.z;
+	if( x > y && y > z ){
+		return 0;
+	}else if( y > x && x > z){
+		return 1;
+	}else{
+		return 2;
+	}
+}
+
 __host__ /* Union , modify a box to overlay a point */
 BBox Union(BBox box, Point3D p){
 	BBox result;
@@ -48,13 +62,13 @@ __host__ /* Union , modify a box to overlay another box */
 BBox Union(BBox box1, BBox box2){
 	BBox result;
 
-	result.pMax.x = MAX(box1.pMax.x,box1.pMax.x);
-	result.pMax.y = MAX(box1.pMax.y,box1.pMax.y);
-	result.pMax.z = MAX(box1.pMax.z,box1.pMax.z);
+	result.pMax.x = MAX(box1.pMax.x,box2.pMax.x);
+	result.pMax.y = MAX(box1.pMax.y,box2.pMax.y);
+	result.pMax.z = MAX(box1.pMax.z,box2.pMax.z);
 		
-	result.pMin.x = MIN(box1.pMin.x,box1.pMin.x);
-	result.pMin.y = MIN(box1.pMin.y,box1.pMin.y);
-	result.pMin.z = MIN(box1.pMin.z,box1.pMin.z);
+	result.pMin.x = MIN(box1.pMin.x,box2.pMin.x);
+	result.pMin.y = MIN(box1.pMin.y,box2.pMin.y);
+	result.pMin.z = MIN(box1.pMin.z,box2.pMin.z);
 	
 	return result;
 }

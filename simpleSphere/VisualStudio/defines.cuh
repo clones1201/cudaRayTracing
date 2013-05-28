@@ -70,13 +70,13 @@ typedef int GeometricObjectType;
 struct GeometricObject{
 	GeometricObjectType type;
 	RGBColor color;
-	Material* material;
+	int materialIdx;
 };
 
 struct Sphere{
 	GeometricObjectType type;
 	RGBColor color;	
-	Material* material;
+	int materialIdx;
 	Point3D	center;
 	float radius;
 };
@@ -84,15 +84,38 @@ struct Sphere{
 struct Plane{	
 	GeometricObjectType type;
 	RGBColor color;	
-	Material* material;
+	int materialIdx;
 	Point3D point;
 	Normal normal;
 };
 
+/* KD Tree
+*/
+
 struct BBox{
-	GeometricObjectType type;
 	Point3D pMax;
 	Point3D pMin;
+};
+
+typedef int KDType;
+
+#define KD_TYPE_INTERIORNODE	0
+#define KD_TYPE_LEAF	1
+
+struct KDNode{
+	KDType type;
+	BBox box;
+	int depth;
+	KDNode *left;
+	KDNode *right;
+};
+
+struct KDLeaf{
+	KDType type;
+	BBox box;
+	int depth;
+	int numObject;
+	int *objects;
 };
 
 /* camara */
@@ -269,9 +292,10 @@ struct World{
 public:
 	GeometricObject **objects;
 	int numObject;
+	Material **materials;
+	int numMaterial;
 	Light **lights;
 	int numLight;
-
 	Light *ambient;
 
 	ViewPlane *vp;
@@ -279,6 +303,7 @@ public:
 //	Sphere *sphere;
 	Camara *camara;
 
+	KDNode *kdTree;
 };
 
 #endif
